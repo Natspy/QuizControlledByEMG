@@ -1,0 +1,19 @@
+[flake8]
+exclude = .eggs,
+          .git,
+          _env,
+          __pycache__,
+          *_pb2.py,
+          *_rc.py,
+          *_ui.py,
+          versioneer.py,
+          _version.py,
+          venv,
+          build,
+          docs,
+          setup.py,
+
+doctests = True
+ignore = W503,E741,W293,E303,E501
+max-line-length = 120
+max-complexity = 11

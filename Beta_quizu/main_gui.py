@@ -261,6 +261,8 @@ for stage in range(3): # te pętle są do wstawienia do klasy Quiz (jako nowa me
         break
     if a.score != a.max_score:
         a.keep_playing()
+        if not a.correct:
+            break
     else:
         print("ALE Z CIEBIE MĄDRA KUREWKA")
 

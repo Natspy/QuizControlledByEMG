@@ -62,6 +62,8 @@ for name in file_names:
     options.append(questions['options'])
     answer.append(questions['answer'])
 
+print(question)
+
 quiz = Quiz()
 quiz.new_game()
 

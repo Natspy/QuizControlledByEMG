@@ -1,0 +1,30 @@
+{
+  "question": [
+    "Pytanie 7. Jaka jest temperatura wrzenia wody w stopniach celsjusza?",
+    "Pytanie 8. Jak wyglada wzor chemiczny wody?",
+    "Pytanie 9. Z jakich atomow zbudowana jest czasteczka wody?"
+  ],
+  "answer": [
+    0,
+    3,
+    1
+  ],
+  "options": [
+
+    ["A. 100",
+      "B. -100",
+      "C. 20",
+      "D. 36.6"
+    ],
+    ["A. H3O",
+      "B. NaOH",
+      "C. O2H",
+      "D. H2O"
+    ],
+    ["A. tlen, azot",
+      "B. tlen,wodor",
+      "C. wodor",
+      "D. wodor, azot"
+    ]
+  ]
+}

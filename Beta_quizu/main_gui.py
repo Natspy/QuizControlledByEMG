@@ -168,40 +168,43 @@ class GUI:
 
 class Logic:
 
-    def __init__(self, path1, path2, path3):
-        """_summary_
+    def __init__(self, file1, file2, file3):
+        """Reads questions.
 
         Args:
-            path1 (_type_): _description_
-            path2 (_type_): _description_
-            path3 (_type_): _description_
+            file1 (string): easy questions. File placed in the same folder.
+            file2 (string): intermediate questions. File placed in the same folder.
+            file3 (string): hard questions. File placed in the same folder.
         """
-        self._path = [path1, path2, path3]  # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
-        self._questions = [[], [], []]
-        self._answers = [[], [], []]
-        self._correct = [[], [], []]
 
-        for i, e in enumerate(self._path):
-            temp = 0  # wczytanie jakoś pliku
-            self._questions[i] = 0  # dzielimy temp na pytania
-            self._answers[i] = 0  # odpowiedzi
-            self._correct[i] = 0  # poprawne odpowiedzi
+        self._path = os.path.dirname(__file__)
+        self._files = [os.path.join(self._path, file1), os.path.join(self._path, file2), os.path.join(self._path, file3)]  # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
+        self._questions = []
+        self._answers = []
+        self._correct = []
+
+        for e in self._files:
+            with open(e) as f:
+                temp = json.load(f)  # wczytanie pliku z pytaniami
+            self._questions.append(temp['question'])  # dzielimy temp na pytania
+            self._answers.append(temp['options'])  # odpowiedzi
+            self._correct.append(temp['answer'])  # poprawne odpowiedzi
 
     def drawQuestions(self):
-        """_summary_
+        """draw 3 random questions for each category.
 
         Returns:
-            _type_: _description_
+            list, list, list: chosen questions, answers and correct answers.
         """
         chosenQuestions = [[], [], []]
         chosenAnswers = [[], [], []]
         chosenCorrect = [[], [], []]
-        for i in range(2):
-            lengths = range(0, len(self.questions[i]))  # indeksy dla danego zbioru pytań
-            chosen = random.choice(lengths, 3)  # losujemy indeksy pytań
-            chosenQuestions[i] = self.questions[i][chosen]
-            chosenAnswers[i] = self.answers[i][chosen]
-            chosenCorrect[i] = self.correct[i][chosen]
+        for i in range(3):
+            lengths = list(range(0, len(self.questions[i])))  # indeksy dla danego zbioru pytań
+            chosen = random.sample(lengths, 3)  # losujemy indeksy pytań
+            chosenQuestions[i] = [self.questions[i][k] for k in chosen]
+            chosenAnswers[i] = [self.answers[i][k] for k in chosen]
+            chosenCorrect[i] = [self.correct[i][k] for k in chosen]
 
         return chosenQuestions, chosenAnswers, chosenCorrect
 
@@ -221,8 +224,19 @@ class Logic:
 class Quiz:
 
     def __init__(self, path1, path2, path3):
+        """Prepares quiz and draws questions.
+
+        Args:
+            path1 (string): easy questions. File placed in the same folder.
+            path2 (string): intermediate questions. File placed in the same folder.
+            path3 (string): hard questions. File placed in the same folder.
+        """
         self._logic = Logic(path1, path2, path3)  # tworzymy logikę
         self._questions, self._answers, self._correct = self._logic.drawQuestions()  # losujemy pytania
+
+    def start(self):
+        """ Starts the game.
+        """
         self._gui = GUI()  # tworzymy GUI
         for i in range(9):  # quiz ma 9 pytań/rund
             q = self._questions[i // 3][i % 3]  # po 3 łatwe, średnie, trudne
@@ -236,33 +250,6 @@ class Quiz:
 
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
-a = GUI()
 
-file_names = ['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json']
-question, options, answer = [], [], []
-
-for name in file_names:
-    with open(name) as f:
-        questions = json.load(f)
-    question.append(questions['question'])
-    options.append(questions['options'])
-    answer.append(questions['answer'])
-
-question_yn = 'Przejść do kolejnego etapu?'
-options_yn = ['Tak, gram dalej', 'Nie, rezygnuję i zabieram kwotę gwarantowaną']
-answer_yn = 0
-
-for stage in range(3): # te pętle są do wstawienia do klasy Quiz (jako nowa metoda np. new_game())
-    for i in range(3):
-        a.question(question[stage][i], options[stage][i], answer[stage][i])
-        if not a.correct:
-            break
-    if not a.correct:
-        break
-    if a.score != a.max_score:
-        a.keep_playing()
-        if not a.correct:
-            break
-    else:
-        print("ALE Z CIEBIE MĄDRA KUREWKA")
-
+q = Quiz('questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json')
+q.start()

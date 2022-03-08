@@ -2,7 +2,7 @@ import pygame
 import os
 import random
 import json
-import numpy as np
+
 
 pygame.init()
 
@@ -14,22 +14,19 @@ class GUI:
         self.path = os.path.dirname(__file__)
         # self.clock = 0 mozna wywalic i guess ale jeszcze nie jestem pewna
 
-        self.score = 0
-        self.awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
         self.correct = True
         self.close = False
-
         self.button_size = (400, 80)
-
         self.color = (169, 169, 169)
 
-    def question(self, que, ans, corr):
+    def question(self, que, ans, corr, award):
         """_summary_
 
         Args:
             que (_type_): _description_
             ans (_type_): _description_
             corr (_type_): _description_
+            award (str): text describing current award.
         """
 
         self.window = pygame.display.set_mode((1280, 720))
@@ -42,8 +39,7 @@ class GUI:
 
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
-                                                 'Aktualna nagroda: {} zł'.format(str(int(self.awards[self.score]))),
-                                                 True, (0, 0, 0))
+                                                 award, True, (0, 0, 0))
             QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 32), que, True, (
                 0, 0, 0))
             ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[0], True, (0, 0, 0))
@@ -77,7 +73,6 @@ class GUI:
                     if event.key == pygame.K_SPACE:
                         if chosen == corr:
                             # color = (0, 128, 0) - to bylo do zaznaczania na inny kolor kiedy poprawne - do updatu
-                            self.score += 1
                             self.run = False
                         else:
                             # color = (255, 0, 0) - same co powyzej
@@ -99,7 +94,6 @@ class GUI:
             self.window.blit(QUESTION, (200, 250))
             self.window.blit(score_text, (0, 0))  # rysowanie okienka z wynikiem
             pygame.display.update()
-
 
 
     def keep_playing(self):
@@ -165,41 +159,20 @@ class GUI:
             self.window.blit(score_text, (0, 0))
             pygame.display.update()
 
+    def ending(self, display):
+        """
+        Ending screen.
 
-
-    def sadEnding(self):
-
-        self.window = pygame.display.set_mode((1280, 720))
-        self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
-
-        while self.run:
-            text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
-                                           'Jesteś dzbanem przykro mi :((. Ale zdobyłes: {} zł'.format(
-                                           str(int(self.awards[self.score]))),
-                                           True, (0, 0, 0))
-
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    self.run = False
-
-            self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150))
-            self.window.blit(text, (200, 250))
-            pygame.display.update()
-
-    def happyEnding(self):
+        Args:
+            display (str): text displayed as final message to the fucking stupid cunt playing.
+        """
 
         self.window = pygame.display.set_mode((1280, 720))
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
 
         while self.run:
-            text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
-                                           'Jestes super! Wygrales/las: {} zł'.format(
-                                           str(int(self.awards[self.score]))),
-                                           True, (0, 0, 0))
+            text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), display, True, (0, 0, 0))
 
             events = pygame.event.get()
             for event in events:
@@ -228,7 +201,7 @@ class Logic:
         """
 
         self._path = os.path.dirname(__file__)
-        self._files = [os.path.join(self._path, e) for e in files] # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
+        self._files = [os.path.join(self._path, e) for e in files]  # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
         self._questions = []
         self._answers = []
         self._correct = []
@@ -244,7 +217,7 @@ class Logic:
         """draw 3 random questions for each category.
 
         Args:
-            n (int): number of questions in each round. 
+            n (int): number of questions in each round.
 
         Returns:
             list, list, list: chosen questions, answers and correct answers.
@@ -285,6 +258,8 @@ class Quiz:
 
         self._rounds = 3  # liczba rund
         self._questionsInRounds = 3  # liczba pytań w każdej rundzie
+        self._awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]  # wartości nagród za kolejne etapy
+        self._score = 0  # na początku mamy 0 punktów
         self._logic = Logic(files)  # tworzymy logikę
         self._questions, self._answers, self._correct = self._logic.drawQuestions(self._questionsInRounds)  # losujemy pytania
         self._gui = GUI()  # tworzymy gui
@@ -297,15 +272,17 @@ class Quiz:
             q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
             a = self._answers[i // self._rounds][i % self._questionsInRounds]
             c = self._correct[i // self._rounds][i % self._questionsInRounds]
-            self._gui.question(q, a, c)  # wyświetlamy pytanie
-            if self._gui.close:
+            r = 'Aktualna nagroda: {} zł'.format(str(int(self._awards[self._score])))  # tekst jaki się wyświetla na ekranie z pytaniem
+            self._gui.question(q, a, c, r)  # wyświetlamy pytanie
+            if self._gui.close:  # jeśli wciskamy x to okno się zamknie
                 break
-            if not self._gui.correct:
-                self._gui.sadEnding()
+            if not self._gui.correct:  # zła odpowiedź to koniec gry
+                self._gui.ending('Jesteś gównem! Wygrałeś/łaś: {} zł'.format(str(int(self._awards[self._score]))))
                 break
+            self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
 
-        if self._gui.correct:
-            self._gui.happyEnding()
+        if self._gui.correct and not self._gui.close:
+            self._gui.ending('Jesteś super! Wygrałeś/łaś: {} zł'.format(str(int(self._awards[self._score]))))
 
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ

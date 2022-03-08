@@ -17,7 +17,6 @@ class GUI:
         self.score = 0
         self.awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
         self.correct = True
-        self.max_score = 9
         self.close = False
 
         self.button_size = (400, 80)
@@ -221,17 +220,15 @@ class GUI:
 
 class Logic:
 
-    def __init__(self, file1, file2, file3):
+    def __init__(self, files):
         """Reads questions.
 
         Args:
-            file1 (string): easy questions. File placed in the same folder.
-            file2 (string): intermediate questions. File placed in the same folder.
-            file3 (string): hard questions. File placed in the same folder.
+            files (list): list of files names. Each file correspond to another lv. of difficulty in increasing order.
         """
 
         self._path = os.path.dirname(__file__)
-        self._files = [os.path.join(self._path, file1), os.path.join(self._path, file2), os.path.join(self._path, file3)]  # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
+        self._files = [os.path.join(self._path, e) for e in files] # ścieżka do pliku z pytaniami: łatwe, średnie, trudne
         self._questions = []
         self._answers = []
         self._correct = []
@@ -243,16 +240,19 @@ class Logic:
             self._answers.append(temp['options'])  # odpowiedzi
             self._correct.append(temp['answer'])  # poprawne odpowiedzi
 
-    def drawQuestions(self):
+    def drawQuestions(self, n):
         """draw 3 random questions for each category.
+
+        Args:
+            n (int): number of questions in each round. 
 
         Returns:
             list, list, list: chosen questions, answers and correct answers.
         """
-        chosenQuestions = [[], [], []]
-        chosenAnswers = [[], [], []]
-        chosenCorrect = [[], [], []]
-        for i in range(3):
+        chosenQuestions = [[] for _ in range(len(self._files))]
+        chosenAnswers = [[] for _ in range(len(self._files))]
+        chosenCorrect = [[] for _ in range(len(self._files))]
+        for i in range(n):
             lengths = list(range(0, len(self.questions[i])))  # indeksy dla danego zbioru pytań
             chosen = random.sample(lengths, 3)  # losujemy indeksy pytań
             chosenQuestions[i] = [self.questions[i][k] for k in chosen]
@@ -276,55 +276,40 @@ class Logic:
 
 class Quiz:
 
-    def __init__(self, path1, path2, path3):
+    def __init__(self, files):
         """Prepares quiz and draws questions.
 
         Args:
-            path1 (string): easy questions. File placed in the same folder.
-            path2 (string): intermediate questions. File placed in the same folder.
-            path3 (string): hard questions. File placed in the same folder.
+            files (list): list of files names. Each file correspond to another lv. of difficulty in increasing order. Files in the same folder.
         """
 
-
-        self._logic = Logic(path1, path2, path3)  # tworzymy logikę
-        self._questions, self._answers, self._correct = self._logic.drawQuestions()  # losujemy pytania
+        self._rounds = 3  # liczba rund
+        self._questionsInRounds = 3  # liczba pytań w każdej rundzie
+        self._logic = Logic(files)  # tworzymy logikę
+        self._questions, self._answers, self._correct = self._logic.drawQuestions(self._questionsInRounds)  # losujemy pytania
         self._gui = GUI()  # tworzymy gui
-        self._max = np.shape(self._questions)[0] * np.shape(self._questions)[1]
 
-    def menu(self):
-        """ Displays the menu
-        """
-        self._gui.menu()
 
     def quiz(self):
         """ Starts the game.
         """
-        for i in range(9):  # quiz ma 9 pytań/rund
-            q = self._questions[i // 3][i % 3]  # po 3 łatwe, średnie, trudne
-            a = self._answers[i // 3][i % 3]
-            c = self._correct[i // 3][i % 3]
+        for i in range(self._rounds * self._questionsInRounds):  # quiz ma 9 pytań/rund
+            q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
+            a = self._answers[i // self._rounds][i % self._questionsInRounds]
+            c = self._correct[i // self._rounds][i % self._questionsInRounds]
             self._gui.question(q, a, c)  # wyświetlamy pytanie
             if self._gui.close:
                 break
             if not self._gui.correct:
-                Quiz.sadEnd(self)
+                self._gui.sadEnding()
                 break
 
-        if i == self._max - 1:  # tu tak na sztywno ale to do testow tylko sorki
-            Quiz.happyEnd(self)
+        if self._gui.correct:
+            self._gui.happyEnding()
 
-    def sadEnd(self):
-        """ Displays the screen when someone loses
-        """
-        self._gui.sadEnding()
-
-    def happyEnd(self):
-        """ Displays the screen when someone wins
-        """
-        self._gui.happyEnding()
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
 
-q = Quiz('questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json')
+q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json'])
 q.quiz()

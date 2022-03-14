@@ -12,7 +12,7 @@ class GUI:
         """
         self.path = os.path.dirname(__file__)
         # self.clock = 0 mozna wywalic i guess ale jeszcze nie jestem pewna
-
+        self.level = 0
         self.correct = True
         self.close = False
         self.button_size = (400, 80)
@@ -185,10 +185,57 @@ class GUI:
             pygame.display.update()
 
     def menu(self):
-        """ Menu - w toku
-
+        """
+        Displaying meny and choosing the level
 
         """
+        self.window = pygame.display.set_mode((1280, 720))
+        self.run = True
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.button_size = (950, 80)
+
+        chosen = 0
+
+        que = 'Jesteś gotowy? Wybierz poziom'
+        ans = ['Poziom 1 - dzieci', 'Poziom 2 - starsze dzieci xd', 'Poziom 3 - duzi ludzie rozumni']
+
+        while self.run:
+            QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 50), que, True, (0, 0, 0))
+            ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[0], True, (0, 0, 0))
+            ANS2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[1], True, (0, 0, 0))
+            ANS3 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[2], True, (0, 0, 0))
+
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    self.run = False
+                    self.close = True
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        chosen += 1
+                    if event.key == pygame.K_SPACE:
+                        self.level = chosen
+                        self.run = False
+
+            chosen = chosen % 3
+
+            button_location = [(150, 350), (150, 450), (150, 550)]
+            self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150))
+
+            # zaznaczamy szarym wybraną opcję
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
+
+            button_location.pop(chosen)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size))
+
+            self.window.blit(ANS1, (200, 370))
+            self.window.blit(ANS2, (200, 470))
+            self.window.blit(ANS3, (200, 570))
+            self.window.blit(QUESTION, (200, 150))
+            pygame.display.update()
 
 
 class Logic:
@@ -270,32 +317,35 @@ class Quiz:
     def quiz(self):
         """ Starts the game.
         """
-        for i in range(self._rounds * self._questionsInRounds):  # quiz ma 9 pytań/rund
-            q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
-            a = self._answers[i // self._rounds][i % self._questionsInRounds]
-            c = self._correct[i // self._rounds][i % self._questionsInRounds]
-            r = 'Aktualna nagroda: {} zł'.format(
-                str(int(self._awards[self._score])))  # tekst jaki się wyświetla na ekranie z pytaniem
-            self._gui.question(q, a, c, r)  # wyświetlamy pytanie
-            if self._gui.close:  # jeśli wciskamy x to okno się zamknie
-                break
-            if not self._gui.correct:  # zła odpowiedź to koniec gry
-                self._gui.ending('Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
-                break
-            self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
+        self._gui.menu()  # otwieramy menu
+        # self._gui.level - jesli chcemy robic pozioy to mamy tutaj juz info jaki poziom trudnosci!
+        if not self._gui.close:
+            for i in range(self._rounds * self._questionsInRounds):  # quiz ma 9 pytań/rund
+                q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
+                a = self._answers[i // self._rounds][i % self._questionsInRounds]
+                c = self._correct[i // self._rounds][i % self._questionsInRounds]
+                r = 'Aktualna nagroda: {} zł'.format(
+                    str(int(self._awards[self._score])))  # tekst jaki się wyświetla na ekranie z pytaniem
+                self._gui.question(q, a, c, r)  # wyświetlamy pytanie
+                if self._gui.close:  # jeśli wciskamy x to okno się zamknie
+                    break
+                if not self._gui.correct:  # zła odpowiedź to koniec gry
+                    self._gui.ending('Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
+                    break
+                self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
 
-            if self._score % self._rounds == 0 and self._score != self._maxScore:
-                self._gui.keep_playing(self._awards, self._score)
-            if self._gui.close:
-                self._gui.ending('Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
-                break
+                if self._score % self._rounds == 0 and self._score != self._maxScore:
+                    self._gui.keep_playing(self._awards, self._score)
+                if self._gui.close:
+                    self._gui.ending('Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
+                    break
 
-        if self._gui.correct and not self._gui.close:
-            self._gui.ending(13 * ' ' + 'Wygrana! Zostajesz milionerem')
+            if self._gui.correct and not self._gui.close:
+                self._gui.ending(13 * ' ' + 'Wygrana! Zostajesz milionerem')
 
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
-
+# before this - KALIBRACJA
 q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json'])
 q.quiz()

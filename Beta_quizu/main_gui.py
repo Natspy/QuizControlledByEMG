@@ -291,7 +291,7 @@ class Quiz:
                 break
 
         if self._gui.correct and not self._gui.close:
-            self._gui.ending(13*' ' + 'Wygrana! Zostajesz milionerem')
+            self._gui.ending(13 * ' ' + 'Wygrana! Zostajesz milionerem')
 
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ

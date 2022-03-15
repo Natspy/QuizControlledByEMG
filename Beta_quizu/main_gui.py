@@ -186,7 +186,10 @@ class GUI:
 
     def menu(self):
         """
-        Displaying meny and choosing the level
+        Displaying meny and choosing the level.
+
+        Returns:
+            int: nuneric representation of difficulty level
 
         """
         self.window = pygame.display.set_mode((1280, 720))
@@ -236,6 +239,8 @@ class GUI:
             self.window.blit(ANS3, (200, 570))
             self.window.blit(QUESTION, (200, 150))
             pygame.display.update()
+
+        return self.level
 
 
 class Logic:
@@ -309,18 +314,23 @@ class Quiz:
         self._awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]  # wartości nagród za kolejne etapy
         self._score = 0  # na początku mamy 0 punktów
         self._maxScore = self._rounds * self._questionsInRounds
-        self._logic = Logic(files)  # tworzymy logikę
-        self._questions, self._answers, self._correct = self._logic.drawQuestions(
-            self._questionsInRounds)  # losujemy pytania
         self._gui = GUI()  # tworzymy gui
+        self._files = files
 
     def quiz(self):
         """ Starts the game.
         """
-        self._gui.menu()  # otwieramy menu
-        # self._gui.level - jesli chcemy robic pozioy to mamy tutaj juz info jaki poziom trudnosci!
+        level = self._gui.menu()  # otwieramy menu i wybieramy poziom trudności
+        if level == 0:  # najłatwiejsze
+            self._logic = Logic(self._files[0:3])  # tworzymy logikę
+        elif level == 1:  # średnie
+            self._logic = Logic(self._files[1:4])
+        elif level == 2:  # trudne
+            self._logic = Logic(self._files[2:5])
+        self._questions, self._answers, self._correct = self._logic.drawQuestions(
+            self._questionsInRounds)  # losujemy pytania
         if not self._gui.close:
-            for i in range(self._rounds * self._questionsInRounds):  # quiz ma 9 pytań/rund
+            for i in range(self._maxScore):  # quiz ma 9 pytań/rund
                 q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
                 a = self._answers[i // self._rounds][i % self._questionsInRounds]
                 c = self._correct[i // self._rounds][i % self._questionsInRounds]
@@ -347,5 +357,5 @@ class Quiz:
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
 # before this - KALIBRACJA
-q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json'])
+q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_1.json', 'questions_stage_2.json'])
 q.quiz()

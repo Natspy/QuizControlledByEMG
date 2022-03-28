@@ -29,6 +29,8 @@ class GUI:
         """
 
         self.window = pygame.display.set_mode((1280, 720))
+        self.width = self.window.get_width()
+        self.height = self.window.get_height()
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (400, 80)

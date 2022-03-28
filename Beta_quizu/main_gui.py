@@ -62,9 +62,9 @@ class GUI:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150))  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             # czy wybrana odpowiedz jest poprawna?
             for event in events:
@@ -78,12 +78,12 @@ class GUI:
                             self.run = False  # to pewnie trzeba zmienić na generowanie jakiegoś ekranu z napisem OJ PRZEGRAŁEŚ KUREWKO
                             self.correct = False
 
-            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius = 15)
 
             # wpisywanie odpowiedzi w buttony
             self.window.blit(ANS1, (200, 470))
@@ -130,11 +130,11 @@ class GUI:
                 chosen = 0
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)
             button_location = [(125, 450), (125, 550), (700, 450), (700, 550)]
 
             pygame.draw.rect(self.window, (169, 169, 169),
-                             pygame.Rect(button_location[chosen], self.button_size))
+                             pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
             # czy wybrana odpowiedz jest poprawna?
             for event in events:
                 if event.type == pygame.KEYDOWN:
@@ -148,10 +148,10 @@ class GUI:
                             self.close = True
                             break
 
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
 
             self.window.blit(ANS1, (200, 470))  # rysowanie okienka z wynikiem
             self.window.blit(ANS2, (200, 570))
@@ -180,7 +180,7 @@ class GUI:
                     self.run = False
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius = 15)
             self.window.blit(text, (200, 250))
             pygame.display.update()
 
@@ -225,14 +225,14 @@ class GUI:
 
             button_location = [(150, 350), (150, 450), (150, 550)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius = 15)
 
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
 
             self.window.blit(ANS1, (200, 370))
             self.window.blit(ANS2, (200, 470))

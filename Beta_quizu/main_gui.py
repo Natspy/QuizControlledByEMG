@@ -2,6 +2,7 @@ import pygame
 import os
 import random
 import json
+from signal_processing import SignalProcess
 
 pygame.init()
 
@@ -17,6 +18,11 @@ class GUI:
         self.close = False
         self.button_size = (400, 80)
         self.color = (169, 169, 169)
+        self._confirm_tick_len = 3
+        self._signal_processing = SignalProcess()
+        # calibration properties
+        self._left_clbr = None
+        self._right_clbr = None
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -36,6 +42,7 @@ class GUI:
         # zmienna ktora oznacza wybrana odp; default = 0
         chosen = 0
 
+        tick_ctr = 0  # licznik ticków dla zaciśniętej dłoni
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
                                                  award, True, (0, 0, 0))
@@ -52,11 +59,11 @@ class GUI:
                     self.run = False
                     self.close = True  # to tak na potrzeby programu zeby sie zamykalo xd slabe rozwiazanie - do poproawy
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        chosen += 1
+            if self._signal_processing("left") > self._left_clbr:
+                chosen += 1
 
             chosen = chosen % 4
+
             button_location = [(150, 450), (150, 550), (700, 450), (700, 550)]
             # rysowanie:
             # najpierw swiat
@@ -67,16 +74,20 @@ class GUI:
             pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
 
             # czy wybrana odpowiedz jest poprawna?
-            for event in events:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        if chosen == corr:
-                            # color = (0, 128, 0) - to bylo do zaznaczania na inny kolor kiedy poprawne - do updatu
-                            self.run = False
-                        else:
-                            # color = (255, 0, 0) - same co powyzej
-                            self.run = False  # to pewnie trzeba zmienić na generowanie jakiegoś ekranu z napisem OJ PRZEGRAŁEŚ KUREWKO
-                            self.correct = False
+            rms = self._signal_processing("right")
+            if rms > self._right_clbr[1]:
+                tick_ctr += 1
+                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+                if tick_ctr > self._confirm_tick_len:
+                    if chosen == corr:
+                        color = (0, 128, 0)
+                        self.run = False
+                    else:
+                        color = (255, 0, 0)
+                        self.run = False
+                        self.correct = False
+            else:
+                tick_ctr = 0
 
             pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size))
 
@@ -106,6 +117,8 @@ class GUI:
         corr = 0
         chosen = 0
         color = (169, 169, 169)
+
+        tick_ctr = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
                                                  'Aktualna nagroda: {} zł'.format(
@@ -122,9 +135,9 @@ class GUI:
                     self.run = False
                     self.close = True
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        chosen += 1
+
+            if self._signal_processing("left") > self._left_clbr:
+                chosen += 1
 
             if chosen > 1:
                 chosen = 0
@@ -135,18 +148,21 @@ class GUI:
 
             pygame.draw.rect(self.window, (169, 169, 169),
                              pygame.Rect(button_location[chosen], self.button_size))
-            # czy wybrana odpowiedz jest poprawna?
-            for event in events:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        if chosen == corr:
-                            color = (0, 128, 0)
-                            self.run = False
-                        else:
-                            color = (255, 0, 0)
-                            self.run = False  # OJ PRZEGRAŁEŚ KUREWKO
-                            self.close = True
-                            break
+            # czy koniec gry?
+            rms = self._signal_processing("right")
+            if rms > self._right_clbr:
+                tick_ctr += 1
+                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+                if tick_ctr > self._confirm_tick_len:
+                    if chosen == corr:
+                        color = (0, 128, 0)
+                        self.run = False
+                    else:
+                        color = (255, 0, 0)
+                        self.run = False
+                        self.correct = False
+            else:
+                tick_ctr = 0
 
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size))
 
@@ -210,7 +226,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-
+                # TODO Czy tutaj chcemy sterowanie klawiaturą, czy mięśniami?
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         chosen += 1
@@ -235,6 +251,51 @@ class GUI:
             self.window.blit(ANS2, (200, 470))
             self.window.blit(ANS3, (200, 570))
             self.window.blit(QUESTION, (200, 150))
+            pygame.display.update()
+
+    def calibration(self, calibration_time=5):
+        """
+        This method must be called before the .menu() method
+        if the menu is to be controlled by muscles
+        or after the .menu() if the menu
+        is to be controlled by keyboard.
+
+        Args:
+            calibration_time - in seconds
+        """
+        self.window = pygame.display.set_mode((1280, 720))
+        self.run = True
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.button_size = (950, 80)
+
+        screen_txt = ["Kalibracja zaraz się zacznie",
+                      "Zaciśnij lewą rękę", "Zaciśnij prawą rękę",
+                      "Koniec kalibracji"]
+        break_ctr = 0
+        while self.run:
+
+            # TODO trzeba na pewno to poprawić
+            if break_ctr < 100:
+                pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+                                        screen_txt[0], True, (0, 0, 0))
+            elif break_ctr < 103:
+                pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+                                        screen_txt[1], True, (0, 0, 0))
+                if break_ctr == 101:
+                    self._left_clbr = self._signal_processing.calibration(calibration_time, 0, 1)
+
+            elif break_ctr < 106:
+                pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+                                        screen_txt[2], True, (0, 0, 0))
+                if break_ctr == 104:
+                    self._right_clbr = self._signal_processing.calibration(calibration_time, 2, 3)
+
+            elif break_ctr < 200:
+                pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+                                        screen_txt[-1], True, (0, 0, 0))
+            else:
+                self.run = False
+            break_ctr += 1
             pygame.display.update()
 
 

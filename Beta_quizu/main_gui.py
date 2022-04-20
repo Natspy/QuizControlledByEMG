@@ -35,6 +35,8 @@ class GUI:
         """
 
         self.window = pygame.display.set_mode((1280, 720))
+        self.width = self.window.get_width()
+        self.height = self.window.get_height()
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (400, 80)
@@ -69,9 +71,9 @@ class GUI:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150))  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             # czy wybrana odpowiedz jest poprawna?
             rms = self._signal_processing("right")
@@ -89,12 +91,12 @@ class GUI:
             else:
                 tick_ctr = 0
 
-            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius = 15)
 
             # wpisywanie odpowiedzi w buttony
             self.window.blit(ANS1, (200, 470))
@@ -143,11 +145,11 @@ class GUI:
                 chosen = 0
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)
             button_location = [(125, 450), (125, 550), (700, 450), (700, 550)]
 
             pygame.draw.rect(self.window, (169, 169, 169),
-                             pygame.Rect(button_location[chosen], self.button_size))
+                             pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
             # czy koniec gry?
             rms = self._signal_processing("right")
             if rms > self._right_clbr:
@@ -164,10 +166,10 @@ class GUI:
             else:
                 tick_ctr = 0
 
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
 
             self.window.blit(ANS1, (200, 470))  # rysowanie okienka z wynikiem
             self.window.blit(ANS2, (200, 570))
@@ -196,13 +198,16 @@ class GUI:
                     self.run = False
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius = 15)
             self.window.blit(text, (200, 250))
             pygame.display.update()
 
     def menu(self):
         """
-        Displaying meny and choosing the level
+        Displaying meny and choosing the level.
+
+        Returns:
+            int: nuneric representation of difficulty level
 
         """
         self.window = pygame.display.set_mode((1280, 720))
@@ -238,20 +243,22 @@ class GUI:
 
             button_location = [(150, 350), (150, 450), (150, 550)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius = 15)
 
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size))
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size))
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
 
             self.window.blit(ANS1, (200, 370))
             self.window.blit(ANS2, (200, 470))
             self.window.blit(ANS3, (200, 570))
             self.window.blit(QUESTION, (200, 150))
             pygame.display.update()
+
+        return self.level
 
     def calibration(self, calibration_time=5):
         """
@@ -370,18 +377,23 @@ class Quiz:
         self._awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]  # wartości nagród za kolejne etapy
         self._score = 0  # na początku mamy 0 punktów
         self._maxScore = self._rounds * self._questionsInRounds
-        self._logic = Logic(files)  # tworzymy logikę
-        self._questions, self._answers, self._correct = self._logic.drawQuestions(
-            self._questionsInRounds)  # losujemy pytania
         self._gui = GUI()  # tworzymy gui
+        self._files = files
 
     def quiz(self):
         """ Starts the game.
         """
-        self._gui.menu()  # otwieramy menu
-        # self._gui.level - jesli chcemy robic pozioy to mamy tutaj juz info jaki poziom trudnosci!
+        level = self._gui.menu()  # otwieramy menu i wybieramy poziom trudności
+        if level == 0:  # najłatwiejsze
+            self._logic = Logic(self._files[0:3])  # tworzymy logikę
+        elif level == 1:  # średnie
+            self._logic = Logic(self._files[1:4])
+        elif level == 2:  # trudne
+            self._logic = Logic(self._files[2:5])
+        self._questions, self._answers, self._correct = self._logic.drawQuestions(
+            self._questionsInRounds)  # losujemy pytania
         if not self._gui.close:
-            for i in range(self._rounds * self._questionsInRounds):  # quiz ma 9 pytań/rund
+            for i in range(self._maxScore):  # quiz ma 9 pytań/rund
                 q = self._questions[i // self._rounds][i % self._questionsInRounds]  # po 3 łatwe, średnie, trudne
                 a = self._answers[i // self._rounds][i % self._questionsInRounds]
                 c = self._correct[i // self._rounds][i % self._questionsInRounds]
@@ -408,5 +420,5 @@ class Quiz:
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
 # before this - KALIBRACJA
-q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json'])
+q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_1.json', 'questions_stage_2.json'])
 q.quiz()

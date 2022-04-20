@@ -59,7 +59,8 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
-                    self.close = True  # to tak na potrzeby programu zeby sie zamykalo xd slabe rozwiazanie - do poproawy
+                    # to tak na potrzeby programu zeby sie zamykalo xd slabe rozwiazanie - do poproawy
+                    self.close = True
 
             if self._signal_processing("left") > self._left_clbr:
                 chosen += 1
@@ -71,9 +72,11 @@ class GUI:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150),
+                             border_radius=15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size),
+                             border_radius=15)
 
             # czy wybrana odpowiedz jest poprawna?
             rms = self._signal_processing("right")
@@ -82,21 +85,23 @@ class GUI:
                 # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
                 if tick_ctr > self._confirm_tick_len:
                     if chosen == corr:
-                        color = (0, 128, 0)
                         self.run = False
                     else:
-                        color = (255, 0, 0)
                         self.run = False
                         self.correct = False
             else:
                 tick_ctr = 0
 
-            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size),
+                             border_radius=15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size),
+                             border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size),
+                             border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size),
+                             border_radius=15)
 
             # wpisywanie odpowiedzi w buttony
             self.window.blit(ANS1, (200, 470))
@@ -137,7 +142,6 @@ class GUI:
                     self.run = False
                     self.close = True
 
-
             if self._signal_processing("left") > self._left_clbr:
                 chosen += 1
 
@@ -145,11 +149,11 @@ class GUI:
                 chosen = 0
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius=15)
             button_location = [(125, 450), (125, 550), (700, 450), (700, 550)]
 
             pygame.draw.rect(self.window, (169, 169, 169),
-                             pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+                             pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
             # czy koniec gry?
             rms = self._signal_processing("right")
             if rms > self._right_clbr:
@@ -166,10 +170,12 @@ class GUI:
             else:
                 tick_ctr = 0
 
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size),
+                             border_radius=15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size),
+                             border_radius=15)
 
             self.window.blit(ANS1, (200, 470))  # rysowanie okienka z wynikiem
             self.window.blit(ANS2, (200, 570))
@@ -198,7 +204,7 @@ class GUI:
                     self.run = False
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius=15)
             self.window.blit(text, (200, 250))
             pygame.display.update()
 
@@ -243,14 +249,17 @@ class GUI:
 
             button_location = [(150, 350), (150, 450), (150, 550)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius=15)
 
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size),
+                             border_radius=15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size),
+                             border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size),
+                             border_radius=15)
 
             self.window.blit(ANS1, (200, 370))
             self.window.blit(ANS2, (200, 470))
@@ -369,7 +378,8 @@ class Quiz:
         """Prepares quiz and draws questions.
 
         Args:
-            files (list): list of files names. Each file correspond to another lv. of difficulty in increasing order. Files in the same folder.
+            files (list): list of files names.
+            Each file correspond to another lv. of difficulty in increasing order. Files in the same folder.
         """
 
         self._rounds = 3  # liczba rund
@@ -403,14 +413,16 @@ class Quiz:
                 if self._gui.close:  # jeśli wciskamy x to okno się zamknie
                     break
                 if not self._gui.correct:  # zła odpowiedź to koniec gry
-                    self._gui.ending('Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
+                    self._gui.ending(
+                        'Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
                     break
                 self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
 
                 if self._score % self._rounds == 0 and self._score != self._maxScore:
                     self._gui.keep_playing(self._awards, self._score)
                 if self._gui.close:
-                    self._gui.ending('Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
+                    self._gui.ending(
+                        'Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
                     break
 
             if self._gui.correct and not self._gui.close:
@@ -420,5 +432,6 @@ class Quiz:
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
 # before this - KALIBRACJA
-q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_1.json', 'questions_stage_2.json'])
+q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_1.json',
+          'questions_stage_2.json'])
 q.quiz()

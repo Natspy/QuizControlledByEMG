@@ -10,6 +10,7 @@ class GUI:
     def __init__(self):
         """_summary_
         """
+
         self.path = os.path.dirname(__file__)
         # self.clock = 0 mozna wywalic i guess ale jeszcze nie jestem pewna
         self.level = 0
@@ -34,6 +35,8 @@ class GUI:
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (400, 80)
+        color = (169, 169, 169)
+
 
         # zmienna ktora oznacza wybrana odp; default = 0
         chosen = 0
@@ -73,21 +76,22 @@ class GUI:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         if chosen == corr:
-                            # color = (0, 128, 0) - to bylo do zaznaczania na inny kolor kiedy poprawne - do updatu
+                            color = (0, 128, 0) # oznaczanie na zielono poprawnej odpowiedzi
                             self.run = False
                         else:
-                            # color = (255, 0, 0) - same co powyzej
-                            self.run = False  # to pewnie trzeba zmienić na generowanie jakiegoś ekranu z napisem OJ PRZEGRAŁEŚ KUREWKO
+                            color = (255, 0, 0) # oznaczanie na czerwono blednej odpoweidzi
+                            self.run = False
                             self.correct = False
 
-            pygame.draw.rect(self.window, self.color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            #rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
 
             button_location.pop(chosen)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius = 15)
 
-            # wpisywanie odpowiedzi w buttony
+            # wpisywanie odpowiedzi w butony
             self.window.blit(ANS1, (200, 470))
             self.window.blit(ANS2, (200, 570))
             self.window.blit(ANS3, (750, 470))
@@ -199,6 +203,7 @@ class GUI:
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (950, 80)
 
+        color = (169, 169, 169)
         chosen = 0
 
         que = 'Jesteś gotowy? Wybierz poziom'
@@ -221,16 +226,17 @@ class GUI:
                         chosen += 1
                     if event.key == pygame.K_SPACE:
                         self.level = chosen
+                        color = (0, 128, 0)
                         self.run = False
 
             chosen = chosen % 3
 
             button_location = [(150, 350), (150, 450), (150, 550)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius = 15)
 
-            # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            #rysowanie wybranego guzika
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+
 
             button_location.pop(chosen)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)

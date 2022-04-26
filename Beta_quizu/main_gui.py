@@ -44,6 +44,7 @@ class GUI:
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
                                                  award, True, (0, 0, 0))
+            score_text_centr = ((self.width - score_text.get_width())/2, 0)
             QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 32), que, True, (
                 0, 0, 0))
             ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[0], True, (0, 0, 0))
@@ -66,7 +67,7 @@ class GUI:
             # rysowanie:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15))
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15)) #prostokąt na górze
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
             pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
@@ -97,7 +98,7 @@ class GUI:
             self.window.blit(ANS3, (750, 470))
             self.window.blit(ANS4, (750, 570))
             self.window.blit(QUESTION, (200, 250))
-            self.window.blit(score_text, (0, 0))  # rysowanie okienka z wynikiem
+            self.window.blit(score_text, score_text_centr)  # rysowanie okienka z wynikiem
             pygame.display.update()
 
     def keep_playing(self, awards, score):
@@ -117,6 +118,7 @@ class GUI:
                                                  'Aktualna nagroda: {} zł'.format(
                                                      str(int(awards[score]))),
                                                  True, (0, 0, 0))
+            score_text_centr = ((self.width - score_text.get_width())/2, 0)
             QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 32), que, True, (
                 0, 0, 0))
             ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[0], True, (0, 0, 0))
@@ -136,6 +138,7 @@ class GUI:
                 chosen = 0
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15)) #prostokąt na górze
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)
             button_location = [(125, 450), (125, 550), (700, 450), (700, 550)]
 
@@ -162,7 +165,7 @@ class GUI:
             self.window.blit(ANS1, (200, 470))  # rysowanie okienka z wynikiem
             self.window.blit(ANS2, (200, 570))
             self.window.blit(QUESTION, (200, 250))
-            self.window.blit(score_text, (0, 0))
+            self.window.blit(score_text, score_text_centr)
             pygame.display.update()
 
     def ending(self, display):

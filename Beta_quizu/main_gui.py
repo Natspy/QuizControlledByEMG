@@ -66,7 +66,7 @@ class GUI:
             # rysowanie:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15))
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
             pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)

@@ -98,6 +98,7 @@ class GUI:
             self.window.blit(ANS4, (750, 570))
             self.window.blit(QUESTION, (200, 250))
             self.window.blit(score_text, (0, 0))  # rysowanie okienka z wynikiem
+
             pygame.display.update()
 
     def keep_playing(self, awards, score):
@@ -250,6 +251,42 @@ class GUI:
 
         return self.level
 
+    def correctAnswer(self):
+        '''
+        Displaying screen after choosing the correct answer
+
+        Returns:
+             Nothing
+        '''
+        self.window = pygame.display.set_mode((1280, 720))
+        self.run = True
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.button_size = (950, 80)
+
+        display_text1 = 'Poprawna odpowiedź!'
+        display_text2 = 'Scisnij prawą ręke, by kontynuować'
+
+        while self.run:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    self.run = False
+                    self.close = True
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.run = False
+
+            display1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), display_text1, True, (0, 0, 0))
+            display2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 20), display_text2, True, (0, 0, 0))
+
+            self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
+            pygame.draw.rect(self.window, (255,255,255), pygame.Rect(150, 200, 950, 150), border_radius=15)
+
+            self.window.blit(display1, (200, 250))
+            self.window.blit(display2, (200, 300))
+
+            pygame.display.update()
 
 class Logic:
 
@@ -350,6 +387,8 @@ class Quiz:
                 if not self._gui.correct:  # zła odpowiedź to koniec gry
                     self._gui.ending('Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
                     break
+                if self._gui.correct and self._gui.run == False:
+                    self._gui.correctAnswer()
                 self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
 
                 if self._score % self._rounds == 0 and self._score != self._maxScore:

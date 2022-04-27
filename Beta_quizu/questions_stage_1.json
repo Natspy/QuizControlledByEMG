@@ -4,7 +4,8 @@
         "Pod wpływem jakiego czynnika woda zmienia swoją postać?",
         "Jak nazywa się woda w postaci gazowej?",
         "W jakiej temperaturze paruje woda?",
-        "Ile procent góry lodowej widać nad powierzchnią wody?",
+        "W jakiej temperaurze zamarza woda?",
+        "Jak nazywa się kawałek pokrywy lodowej spływający rzeką?",
         "Czym żywi się płetwal błękitny?",
         "Skąd bierze się woda w kranie?",
         "Jąką wodę używamy do picia, mycia i gotowania?",
@@ -19,6 +20,7 @@
         0,
         2,
         3,
+        1,
         3,
         2,
         1,
@@ -55,10 +57,16 @@
             "100 ° C"
         ],
         [
-            "mniej niż 2%",
-            "około 90%",
-            "ponad 110%",
-            "około 10%"
+            "- 1 ° C",
+            "0°C",
+            "1 ° C",
+            "100 ° C"
+        ],
+        [
+            "kra skalna",
+            "kra litosfery",
+            "kra lodowcowa",
+            "kra lodowa"
         ],
         [
             "fotosyntezą",

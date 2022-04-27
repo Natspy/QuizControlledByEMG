@@ -1,0 +1,80 @@
+{
+    "question": [
+        "Jak nazywa się największe jezioro na świecie?",
+        "Jak nazywa się najbardziej zasolone morze?",
+        "Jak nazywa się najwyższy wodospad na świecie?",
+        "Jak nazywa się woda w stanie ciekłym w temperaturze poniżej 0°C?",
+        "Jakie związki wywołują zjawisko kwaśnych deszczy?",
+        "W jakiej temperaturze woda ma największą gęstość?",
+        "Ile wody rocznie zużywa przeciętny mieszkaniec Polski?",
+        "Co wyróżnia ryby dwudyszne?",
+        "Ile minut wynosi rekord wstrzymania oddechu pod wodą?"
+    ],
+    "answer": [
+        0,
+        2,
+        3,
+        0,
+        1,
+        0,
+        1,
+        3,
+        2
+    ],
+    "options": [
+        [
+            "Morze Kaspijskie",
+            "Jezioro Wiktorii",
+            "Jezioro Tanganika",
+            "Bajkał"
+        ],
+        [
+            "Morze Martwe",
+            "Morze Czarne",
+            "Morze Czerwone",
+            "Morze Bałtyckie"
+        ],
+        [
+            "Wodogrzmoty Mickiewicza",
+            "Siklawa",
+            "Niagara",
+            "Salto Angel"
+        ],
+        [
+            "woda przechłodzona",
+            "zimna woda",
+            "zamrożona woda",
+            "takie zjawisko nie istnieje"
+        ],
+        [
+            "fluorowodór",
+            "tlenki siarki",
+            "tlenek platyny",
+            "siarczek srebra"
+        ],
+        [
+            "4 ° C",
+            "99 ° C",
+            "0 ° C",
+            "-4 ° C"
+        ],
+        [
+            "3 litry",
+            "około 36 000 litrów",
+            "100 litrów",
+            "10 litrów"
+        ],
+        [
+            "nie mogą oddychać pod wodą",
+            "mają dwie pary oskrzeli",
+            "mają dwie pary płuc",
+            "mogą oddychać tlenem z powietrza"
+        ],
+        [
+            "6 minut",
+            "15 minut",
+            "24 minuty",
+            "43 minut"
+        ]
+    ]
+}

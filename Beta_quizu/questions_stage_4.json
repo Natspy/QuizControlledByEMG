@@ -1,0 +1,104 @@
+{
+    "question": [
+        "Jak nazywa się największa rzeka w Polsce?",
+        "Jak nazywa się największy ocean?",
+        "Który ocean leży między Europą a Ameryką?",
+        "Czym są kwaśne deszcze?",
+        "Jaką temperaturę ma woda na dnie jeziora?",
+        "Ile procent calej wody na świecie stanowi słodka woda?",
+        "Dzięki jakemu zjawisku nartniki unoszą się na wodzie?",
+        "Czy delfiny oddychają pod wodą jak ryby?",
+        "Czym jest suchy lód?",
+        "W jakiej temperaturze wrze woda na szczycie Mount Everest?",
+        "Uczucie pragnienia pojawia się gdy człowiek straci:",
+        "W jakiej wodzie żyją rekiny?"
+    ],
+    "answer": [
+        0,
+        3,
+        1,
+        2,
+        3,
+        2,
+        1,
+        0,
+        3,
+        3,
+        0,
+        2
+    ],
+    "options": [
+        [
+            "Wisła",
+            "Amazonka",
+            "Odra",
+            NaN
+        ],
+        [
+            "Ocean Wesoły",
+            "Ocean Indyjski",
+            "Ocean  Atlantycki",
+            "Pacyfik"
+        ],
+        [
+            "Ocean Indyjski",
+            "Ocean Atlantycki",
+            "Ocean Spokojny",
+            "Ocean Chiński"
+        ],
+        [
+            "opady żółtego śniegu",
+            "deszcz żab",
+            "opady atmosferyczne o odczynie kwasowym",
+            "opady kwasu ozonowego"
+        ],
+        [
+            "88 ° C",
+            "12 ° C",
+            "-10 ° C",
+            "4 ° C"
+        ],
+        [
+            0,
+            0.75,
+            0.025,
+            0.9
+        ],
+        [
+            "adhezja",
+            "kohezja",
+            "grawitacja",
+            "siły van der Waalsa"
+        ],
+        [
+            "nie, muszą czasem wypływać na powierzchnię",
+            "tak",
+            "mogą oddychać i pod wodą i na lądzie",
+            "delfiny nie oddychają"
+        ],
+        [
+            "zamrożony kwas azotowy",
+            "woda w temperaturze -100°C",
+            "lód na powierzchni jeziora",
+            "zestalony dwutlenek węgla"
+        ],
+        [
+            "100 °C",
+            "200 °C",
+            "0 °C",
+            "68°C"
+        ],
+        [
+            "1% wody zawartej w organiźmie",
+            "50 % wody w organiźmie",
+            "10 % wody w orgaiźmie",
+            "0,1 % wody w organiźmie"
+        ],
+        [
+            "w słodkiej i słonej",
+            "w słodkiej",
+            "w słonej",
+            "rekiny nie żyją w wodzie"
+        ]
+    ]
+}

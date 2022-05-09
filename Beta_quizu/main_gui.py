@@ -215,8 +215,8 @@ class GUI:
 
         """
 
-        button_height = self.resolution[0] / 20  # wielokrotność rozdzielczości
-        button_width = self.resolution[1] / 2
+        button_height = self.resolution[1] / 20  # wielokrotność rozdzielczości
+        button_width = self.resolution[0] / 2
         button_pos_x = self.resolution[0] / 10
         button_pos_y = self.resolution[1] / 10 * 3
         self.run = True
@@ -254,7 +254,7 @@ class GUI:
 
             chosen = chosen % 3
 
-            button_location = [(button_pos_x, button_pos_y), (button_pos_x, button_pos_y + 1.5 * button_height), (button_pos_x, button_pos_y + 3* button_height)]
+            button_location = [(button_pos_x, button_pos_y), (button_pos_x, button_pos_y + 1.5 * button_height), (button_pos_x, button_pos_y + 3 * button_height)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
             # rysowanie wybranego guzika

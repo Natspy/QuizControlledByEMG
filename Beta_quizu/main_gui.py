@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pygame
 import os
 import random
@@ -18,6 +20,7 @@ class GUI:
         self.close = False
         self.button_size = (400, 80)
         self.color = (169, 169, 169)
+        self.font = "Calibri"
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -37,20 +40,19 @@ class GUI:
         self.button_size = (400, 80)
         color = (169, 169, 169)
 
-
-        # zmienna ktora oznacza wybrana odp; default = 0
+        # zmienna, ktora oznacza wybrana odp; default = 0
         chosen = 0
 
         while self.run:
-            score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
+            score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                  award, True, (0, 0, 0))
-            score_text_centr = ((self.width - score_text.get_width())/2, 0)
-            QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 32), que, True, (
+            score_text_centr = ((self.width - score_text.get_width()) / 2, 0)
+            QUESTION = pygame.font.Font.render(pygame.font.SysFont(self.font, 32), que, True, (
                 0, 0, 0))
-            ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[0], True, (0, 0, 0))
-            ANS2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[1], True, (0, 0, 0))
-            ANS3 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[2], True, (0, 0, 0))
-            ANS4 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), ans[3], True, (0, 0, 0))
+            ANS1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), ans[0], True, (0, 0, 0))
+            ANS2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), ans[1], True, (0, 0, 0))
+            ANS3 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), ans[2], True, (0, 0, 0))
+            ANS4 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), ans[3], True, (0, 0, 0))
 
             events = pygame.event.get()
             for event in events:
@@ -64,33 +66,34 @@ class GUI:
 
             chosen = chosen % 4
             button_location = [(150, 450), (150, 550), (700, 450), (700, 550)]
+
             # rysowanie:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15)) #prostokąt na górze
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height / 15))  # prostokąt na górze
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius=15)  # rysowanie pola na pytanie
             # zaznaczamy szarym wybraną opcję
-            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
             # czy wybrana odpowiedz jest poprawna?
             for event in events:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         if chosen == corr:
-                            color = (0, 128, 0) # oznaczanie na zielono poprawnej odpowiedzi
+                            color = (0, 128, 0)  # oznaczanie na zielono poprawnej odpowiedzi
                             self.run = False
                         else:
-                            color = (255, 0, 0) # oznaczanie na czerwono blednej odpoweidzi
+                            color = (255, 0, 0)  # oznaczanie na czerwono blednej odpoweidzi
                             self.run = False
                             self.correct = False
 
-            #rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            # rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[2], self.button_size), border_radius=15)
 
             # wpisywanie odpowiedzi w butony
             self.window.blit(ANS1, (200, 470))
@@ -108,21 +111,21 @@ class GUI:
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (1000, 80)
 
-        que = 'Przejść do kolejnego etapu?'
-        ans = ['Tak, gram dalej', 'Nie, rezygnuję i zabieram kwotę gwarantowaną ({} zł)'.format(int(awards[score]))]
+        que = u'Przejść do kolejnego etapu?'
+        ans = [u'Tak, gram dalej', u'Nie, rezygnuję i zabieram kwotę gwarantowaną ({} zł)'.format(int(awards[score]))]
         corr = 0
         chosen = 0
         color = (169, 169, 169)
         while self.run:
-            score_text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48),
-                                                 'Aktualna nagroda: {} zł'.format(
+            score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
+                                                 u'Aktualna nagroda: {} zł'.format(
                                                      str(int(awards[score]))),
                                                  True, (0, 0, 0))
-            score_text_centr = ((self.width - score_text.get_width())/2, 0)
-            QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 32), que, True, (
+            score_text_centr = ((self.width - score_text.get_width()) / 2, 0)
+            QUESTION = pygame.font.Font.render(pygame.font.SysFont(self.font, 32), que, True, (
                 0, 0, 0))
-            ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[0], True, (0, 0, 0))
-            ANS2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[1], True, (0, 0, 0))
+            ANS1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[0], True, (0, 0, 0))
+            ANS2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[1], True, (0, 0, 0))
 
             events = pygame.event.get()
             for event in events:
@@ -138,12 +141,12 @@ class GUI:
                 chosen = 0
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height/15)) #prostokąt na górze
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height / 15))  # prostokąt na górze
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius=15)
             button_location = [(125, 450), (125, 550), (700, 450), (700, 550)]
 
             pygame.draw.rect(self.window, (169, 169, 169),
-                             pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+                             pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
             # czy wybrana odpowiedz jest poprawna?
             for event in events:
                 if event.type == pygame.KEYDOWN:
@@ -153,14 +156,14 @@ class GUI:
                             self.run = False
                         else:
                             color = (255, 0, 0)
-                            self.run = False  # OJ PRZEGRAŁEŚ KUREWKO
+                            self.run = False
                             self.close = True
                             break
 
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius=15)
 
             self.window.blit(ANS1, (200, 470))  # rysowanie okienka z wynikiem
             self.window.blit(ANS2, (200, 570))
@@ -181,7 +184,7 @@ class GUI:
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
 
         while self.run:
-            text = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), display, True, (0, 0, 0))
+            text = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), display, True, (0, 0, 0))
 
             events = pygame.event.get()
             for event in events:
@@ -189,7 +192,7 @@ class GUI:
                     self.run = False
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius=15)
             self.window.blit(text, (200, 250))
             pygame.display.update()
 
@@ -209,14 +212,14 @@ class GUI:
         color = (169, 169, 169)
         chosen = 0
 
-        que = 'Jesteś gotowy? Wybierz poziom'
-        ans = ['Poziom 1 - dzieci', 'Poziom 2 - starsze dzieci xd', 'Poziom 3 - duzi ludzie rozumni']
+        que = u'Jesteś gotowy? Wybierz poziom'
+        ans = [u'Poziom 1: wiek 7 - 12', u'Poziom 2: wiek 13 - 18', u'Poziom 3: dorośli']
 
         while self.run:
-            QUESTION = pygame.font.Font.render(pygame.font.SysFont("calibri", 50), que, True, (0, 0, 0))
-            ANS1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[0], True, (0, 0, 0))
-            ANS2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[1], True, (0, 0, 0))
-            ANS3 = pygame.font.Font.render(pygame.font.SysFont("calibri", 38), ans[2], True, (0, 0, 0))
+            QUESTION = pygame.font.Font.render(pygame.font.SysFont(self.font, 50), que, True, (0, 0, 0))
+            ANS1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[0], True, (0, 0, 0))
+            ANS2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[1], True, (0, 0, 0))
+            ANS3 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[2], True, (0, 0, 0))
 
             events = pygame.event.get()
             for event in events:
@@ -237,13 +240,13 @@ class GUI:
             button_location = [(150, 350), (150, 450), (150, 550)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
-            #rysowanie wybranego guzika
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius = 15)
+            # rysowanie wybranego guzika
+            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
 
             button_location.pop(chosen)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius = 15)
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius = 15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius=15)
 
             self.window.blit(ANS1, (200, 370))
             self.window.blit(ANS2, (200, 470))
@@ -260,13 +263,14 @@ class GUI:
         Returns:
              Nothing
         '''
+
         self.window = pygame.display.set_mode((1280, 720))
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (950, 80)
 
-        display_text1 = 'Poprawna odpowiedź!'
-        display_text2 = 'Scisnij prawą ręke, by kontynuować'
+        display_text1 = u'Poprawna odpowiedź!'
+        display_text2 = u'Ściśnij prawą ręke, by kontynuować'
 
         while self.run:
             events = pygame.event.get()
@@ -279,16 +283,17 @@ class GUI:
                     if event.key == pygame.K_SPACE:
                         self.run = False
 
-            display1 = pygame.font.Font.render(pygame.font.SysFont("calibri", 48), display_text1, True, (0, 0, 0))
-            display2 = pygame.font.Font.render(pygame.font.SysFont("calibri", 20), display_text2, True, (0, 0, 0))
+            display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), display_text1, True, (0, 0, 0))
+            display2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 20), display_text2, True, (0, 0, 0))
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            pygame.draw.rect(self.window, (255,255,255), pygame.Rect(150, 200, 950, 150), border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius=15)
 
             self.window.blit(display1, (200, 250))
             self.window.blit(display2, (200, 300))
 
             pygame.display.update()
+
 
 class Logic:
 
@@ -307,7 +312,7 @@ class Logic:
         self._correct = []
 
         for e in self._files:
-            with open(e) as f:
+            with open(e, encoding='utf-8') as f:
                 temp = json.load(f)  # wczytanie pliku z pytaniami
             self._questions.append(temp['question'])  # dzielimy temp na pytania
             self._answers.append(temp['options'])  # odpowiedzi
@@ -389,18 +394,18 @@ class Quiz:
                 if not self._gui.correct:  # zła odpowiedź to koniec gry
                     self._gui.ending('Zła odpowiedź! Koniec gry. Twój wynik: {} zł'.format(str(int(self._awards[self._score]))))
                     break
-                if self._gui.correct and self._gui.run == False:
+                if self._gui.correct and not self._gui.run:
                     self._gui.correctAnswer()
                 self._score += 1  # skoro tu doszliśmy, to odpowiedź była poprawna, czyli + punkt
 
                 if self._score % self._rounds == 0 and self._score != self._maxScore:
                     self._gui.keep_playing(self._awards, self._score)
                 if self._gui.close:
-                    self._gui.ending('Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
+                    self._gui.ending(u'Dziękujemy za udział! Wygrałeś/łaś {} zł'.format(str(int(self._awards[self._score]))))
                     break
 
             if self._gui.correct and not self._gui.close:
-                self._gui.ending(13 * ' ' + 'Wygrana! Zostajesz milionerem')
+                self._gui.ending(13 * ' ' + u'Wygrana! Zostajesz milionerem!!!')
 
 
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ

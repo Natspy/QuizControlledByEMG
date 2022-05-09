@@ -21,6 +21,7 @@ class GUI:
         self.button_size = (400, 80)
         self.color = (169, 169, 169)
         self.font = "Calibri"
+        self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -32,7 +33,6 @@ class GUI:
             award (str): text describing current award.
         """
 
-        self.window = pygame.display.set_mode((1280, 720))
         self.width = self.window.get_width()
         self.height = self.window.get_height()
         self.run = True
@@ -58,11 +58,14 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
-                    self.close = True  # to tak na potrzeby programu zeby sie zamykalo xd slabe rozwiazanie - do poproawy
+                    self.close = True
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         chosen += 1
+                    elif event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        self.close = True
 
             chosen = chosen % 4
             button_location = [(150, 450), (150, 550), (700, 450), (700, 550)]
@@ -106,7 +109,6 @@ class GUI:
 
     def keep_playing(self, awards, score):
 
-        self.window = pygame.display.set_mode((1280, 720))
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (1000, 80)
@@ -136,6 +138,9 @@ class GUI:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         chosen += 1
+                    elif event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        self.close = True
 
             if chosen > 1:
                 chosen = 0
@@ -179,7 +184,6 @@ class GUI:
             # display (str): text displayed as final message to the fucking stupid cunt playing. // Why so toxic?
         """
 
-        self.window = pygame.display.set_mode((1280, 720))
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
 
@@ -190,6 +194,11 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        self.close = True
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius=15)
@@ -204,7 +213,7 @@ class GUI:
             int: nuneric representation of difficulty level
 
         """
-        self.window = pygame.display.set_mode((1280, 720))
+
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (950, 80)
@@ -230,10 +239,13 @@ class GUI:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         chosen += 1
-                    if event.key == pygame.K_SPACE:
+                    elif event.key == pygame.K_SPACE:
                         self.level = chosen
                         color = (0, 128, 0)
                         self.run = False
+                    elif event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        self.close = True
 
             chosen = chosen % 3
 
@@ -264,7 +276,7 @@ class GUI:
              Nothing
         '''
 
-        self.window = pygame.display.set_mode((1280, 720))
+
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (950, 80)
@@ -282,6 +294,9 @@ class GUI:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.run = False
+                    elif event.key == pygame.K_ESCAPE:
+                        self.run = False
+                        self.close = True
 
             display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), display_text1, True, (0, 0, 0))
             display2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 20), display_text2, True, (0, 0, 0))

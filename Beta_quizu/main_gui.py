@@ -22,6 +22,7 @@ class GUI:
         self.color = (169, 169, 169)
         self.font = "Calibri"
         self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.resolution = self.window.get_size()
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -214,9 +215,13 @@ class GUI:
 
         """
 
+        button_height = self.resolution[1] / 20  # wielokrotność rozdzielczości
+        button_width = self.resolution[0] / 2
+        button_pos_x = self.resolution[0] / 10
+        button_pos_y = self.resolution[1] / 10 * 3
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
-        self.button_size = (950, 80)
+        self.button_size = (button_width, button_height)
 
         color = (169, 169, 169)
         chosen = 0
@@ -249,7 +254,7 @@ class GUI:
 
             chosen = chosen % 3
 
-            button_location = [(150, 350), (150, 450), (150, 550)]
+            button_location = [(button_pos_x, button_pos_y), (button_pos_x, button_pos_y + 1.5 * button_height), (button_pos_x, button_pos_y + 3 * button_height)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
             # rysowanie wybranego guzika

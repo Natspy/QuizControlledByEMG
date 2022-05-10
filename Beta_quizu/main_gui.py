@@ -19,7 +19,7 @@ class GUI:
         self.correct = True
         self.close = False
         self.color = (169, 169, 169)
-        self.font = "Arial"
+        self.font = "Comic Sans MS"
         self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.width = self.window.get_width()
         self.height = self.window.get_height()
@@ -73,9 +73,9 @@ class GUI:
 
 
             button_location = [(self.width/10, self.height/2),
-                               (self.width/10, self.height/2 + self.height * 0.1),
-                               (self.width/10, self.height/2 + 2 * self.height * 0.1),
-                               (self.width/10, self.height/2 + 3 * self.height * 0.1)]
+                               (self.width/10, self.height/2 + 1.2 * self.button_size[1]),
+                               (self.width/10, self.height/2 + 2.4 * self.button_size[1]),
+                               (self.width/10, self.height/2 + 3.6 * self.button_size[1])]
 
             # rysowanie:
             # najpierw swiat
@@ -225,10 +225,10 @@ class GUI:
 
         """
 
-        button_height = self.height / 10  # wielokrotność rozdzielczości
-        button_width = self.width / 2
+        button_height = self.height / 12  # wielokrotność rozdzielczości
+        button_width = self.width * 0.6
         button_pos_x = self.width / 10
-        button_pos_y = self.height / 10 * 3
+        button_pos_y = self.height / 2
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
         self.button_size = (button_width, button_height)
@@ -264,22 +264,28 @@ class GUI:
 
             chosen = chosen % 3
 
-            button_location = [(button_pos_x, button_pos_y), (button_pos_x, button_pos_y + 1.5 * button_height), (button_pos_x, button_pos_y + 3 * button_height)]
+            button_location = [(button_pos_x, button_pos_y),
+                               (button_pos_x, button_pos_y + 1.2 * button_height),
+                               (button_pos_x, button_pos_y + 2.4 * button_height)]
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
             # rysowanie wybranego guzika
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
             # guzik pod pytanie
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 100, 950, 150), border_radius=15)
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect((self.width/10, self.height/5), (self.width * 0.6, self.height * 0.2)), border_radius=15)  # rysowanie pola na pytanie
 
             button_location.pop(chosen)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius=15)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius=15)
 
-            self.window.blit(ANS1, (200, 370))
-            self.window.blit(ANS2, (200, 470))
-            self.window.blit(ANS3, (200, 570))
+            ans_location = [(button_pos_x * 1.2, button_pos_y * 1.05),
+                               (button_pos_x * 1.2, button_pos_y * 1.05 + 1.2 * button_height),
+                               (button_pos_x * 1.2, button_pos_y * 1.05 + 2.4 * button_height)]
+
+            self.window.blit(ANS1, ans_location[0])
+            self.window.blit(ANS2, ans_location[1])
+            self.window.blit(ANS3, ans_location[2])
             self.window.blit(QUESTION, (200, 150))
             pygame.display.update()
 

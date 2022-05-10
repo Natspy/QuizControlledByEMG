@@ -4,6 +4,7 @@ import pygame
 import os
 import random
 import json
+from signal_processing import SignalProcess
 
 pygame.init()
 
@@ -23,6 +24,11 @@ class GUI:
         self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.width = self.window.get_width()
         self.height = self.window.get_height()
+        self._confirm_tick_len = 2
+        self._signal_processing = SignalProcess()
+        # calibration properties
+        self._left_clbr = None
+        self._right_clbr = None
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -68,6 +74,9 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+            # sterowanie mięśniami
+            if self._signal_processing("left") > self._left_clbr:
+                chosen += 1
 
             chosen = chosen % 4
 
@@ -97,6 +106,20 @@ class GUI:
                             color = (255, 0, 0)  # oznaczanie na czerwono blednej odpoweidzi
                             self.run = False
                             self.correct = False
+
+            rms = self._signal_processing("right")
+            print(rms, self._left_clbr, self._right_clbr)
+            if rms > self._right_clbr:
+                tick_ctr += 1
+                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+                if tick_ctr > self._confirm_tick_len:
+                    if chosen == corr:
+                        self.run = False
+                    else:
+                        self.run = False
+                        self.correct = False
+            else:
+                tick_ctr = 0
 
             # rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
@@ -153,6 +176,9 @@ class GUI:
                         self.run = False
                         self.close = True
 
+            if self._signal_processing("left") > self._left_clbr:
+                chosen += 1
+
             if chosen > 1:
                 chosen = 0
 
@@ -175,6 +201,22 @@ class GUI:
                             self.run = False
                             self.close = True
                             break
+
+            rms = self._signal_processing("right")
+            if rms > self._right_clbr:
+                tick_ctr += 1
+                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+                if tick_ctr > self._confirm_tick_len:
+                    if chosen == corr:
+                        color = (0, 128, 0)
+                        self.run = False
+                    else:
+                        color = (255, 0, 0)
+                        self.run = False
+                        self.close = True
+                        break
+            else:
+                tick_ctr = 0
 
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 

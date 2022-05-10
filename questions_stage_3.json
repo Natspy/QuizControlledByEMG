@@ -1,0 +1,96 @@
+{
+    "question": [
+        "Jak nazywa się najdłuższa rzeka świata?",
+        "Na jakie odcinki dzieli się bieg rzeki?",
+        "Czym jest mgła?",
+        "Czym są chmury?",
+        "Ile procent góry lodowej widać nad powierzchnią wody?",
+        "Dlaczego ryby mogą oddychać pod wodą?",
+        "W jakiej wodzie żyją krokodyle?",
+        "Czym jest twarda woda?",
+        "Czyja wyprawa pierwsza opłynęłą Ziemię?",
+        "Jaka woda najszybciej zamrza?",
+        "Jak nazywa się miejsce w którym rzeka kończy swój bieg?"
+    ],
+    "answer": [
+        3,
+        0,
+        0,
+        3,
+        3,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0
+    ],
+    "options": [
+        [
+            "Missouri",
+            "Jangcy",
+            "Wołga",
+            "Nil"
+        ],
+        [
+            "górny, środkowy i dolny",
+            "biały, zielony i niebieski",
+            "ciężki, środkowy i lekki",
+            "wąski, środkowy i szeroki"
+        ],
+        [
+            "aerozolem składającym się z drobnych kropelek wody",
+            "smogiem",
+            "dymem z kominów",
+            "parą wodną"
+        ],
+        [
+            "smogiem",
+            "dymem z kominów",
+            "parą wodną",
+            "skupiskiem kropel wody i kryształków lodu"
+        ],
+        [
+            "mniej niż 2%",
+            "około 90%",
+            "ponad 110%",
+            "około 10%"
+        ],
+        [
+            "bo mają specjalne płuca",
+            "bo nie potrzebują tlenu",
+            "bo mają skrzela",
+            "żadne z wymienionych"
+        ],
+        [
+            "w wodzie słodkiej i słonej",
+            "W wodzie słodkiej",
+            "w wodzie słonej",
+            "w wodzie destylowanej"
+        ],
+        [
+            "woda o wysokiej zawartości minerałów",
+            "woda w stanie stałym",
+            "woda butelkowana",
+            "woda w kapsułkach"
+        ],
+        [
+            "Krzysztofa Kolumba",
+            "Ferdynanda Magellana",
+            "Vasco da Gamy",
+            "Francisa Drake'a"
+        ],
+        [
+            "gorąca woda",
+            "lodowata woda",
+            "woda w temperaturze pokojowej",
+            "słodka"
+        ],
+        [
+            "ujście",
+            "meander",
+            "źródło",
+            "zalew"
+        ]
+    ]
+}

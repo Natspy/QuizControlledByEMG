@@ -1,0 +1,112 @@
+{
+    "question": [
+        "Z jakich pierwiastków składa się cząsteczka wody?",
+        "Jak nazywa się największa rzeka w Polsce?",
+        "Nad jakim morzem leży Polska?",
+        "W ilu procentach człowiek składa się z wody?",
+        "Czym są lodowce?",
+        "Cząsteczka wody jest:",
+        "Jak nazywa się najgłębsze miejsce na ziemi?",
+        "Ile dni człowiek może przeżyć bez wody?",
+        "Czym jest tsunami?",
+        "Do jakiej grupy zwierząt należą koniki morskie?",
+        "Jak nazywa się miejsce w którym rzeka ma swój początek?",
+        "Jak nazywają się jaja żab?",
+        "Jak nazywają się jaja ryb?"
+    ],
+    "answer": [
+        2,
+        0,
+        2,
+        0,
+        1,
+        1,
+        2,
+        1,
+        0,
+        2,
+        2,
+        3,
+        0
+    ],
+    "options": [
+        [
+            "wodór i chlor",
+            "siarka i tlen",
+            "wodór i tlen",
+            "tlen i węgiel"
+        ],
+        [
+            "Wisła",
+            "Amazonka",
+            "Odra",
+            NaN
+        ],
+        [
+            "Morze Czerwone",
+            "Morze Czarne",
+            "Morze Bałtyckie",
+            "Morze Biało-Czerowne"
+        ],
+        [
+            "ok. 70%",
+            "ok. 20%",
+            "ok. 90%",
+            "ok. 50%"
+        ],
+        [
+            "zamarzniętą wodą z oceanu",
+            "masą lodu powstałą z nagromadzonego śniegu",
+            "górami pokrytymi śniegiem",
+            "żadnym z wymienionych"
+        ],
+        [
+            "singletonem",
+            "dipolem",
+            "tripolem",
+            "kwadrupolem"
+        ],
+        [
+            "Żuławy Wiślane",
+            "Nizina Nadkaspijska",
+            "Rów Mariański",
+            "Kotlina Turfańska"
+        ],
+        [
+            "1 dzień",
+            "4 do 7 dni",
+            "około 12 dni",
+            "3 tygodnie"
+        ],
+        [
+            "gigantyczną falą",
+            "ulewnym deszczem",
+            "typem statku",
+            "wiatrem nadchodzącym ze zbiornika wodnego"
+        ],
+        [
+            "ssaki",
+            "płazy",
+            "ryby",
+            "gady"
+        ],
+        [
+            "ujście",
+            "meander",
+            "źródło",
+            "delta rzeki"
+        ],
+        [
+            "imago",
+            "ikra",
+            "płazki",
+            "skrzek"
+        ],
+        [
+            "ikra",
+            "skrzek",
+            "rybiki",
+            "imago"
+        ]
+    ]
+}

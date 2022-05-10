@@ -29,10 +29,10 @@
     ],
     "options": [
         [
-            "Odra",
+            "Morskie Oko",
             "Śniardwy",
             "Hańcza",
-            NaN
+            "Wigry"
         ],
         [
             "Ocean Wesoły",
@@ -59,10 +59,10 @@
             "4 ° C"
         ],
         [
-            0,
-            0.75,
-            0.025,
-            0.9
+            "0 %",
+            "75 %",
+            "2.5 %",
+            "9 %"
         ],
         [
             "adhezja",

@@ -18,7 +18,7 @@ pygame.init()
 
 
 class GUI:
-    def __init__(self):
+    def __init__(self, queue, lock):
         """_summary_
         """
 
@@ -32,8 +32,8 @@ class GUI:
         self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.width = self.window.get_width()
         self.height = self.window.get_height()
-        self._confirm_tick_len = 2
-        self._rms = RMS()
+        self.__queue = queue
+        self._rms = RMS(lock)
         # calibration properties
         self._left_clbr = 2000
         self._right_clbr = 3000
@@ -55,7 +55,6 @@ class GUI:
 
         # zmienna, ktora oznacza wybrana odp; default = 0
         chosen = 0
-        tick_ctr = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                  award, True, (0, 0, 0))
@@ -75,6 +74,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -117,15 +117,12 @@ class GUI:
                             self.correct = False
 
             if self._rms.right > self._right_clbr:
-                tick_ctr += 1
-                if tick_ctr > self._confirm_tick_len:
-                    if chosen == corr:
-                        self.run = False
-                    else:
-                        self.run = False
-                        self.correct = False
+                if chosen == corr:
+                    self.run = False
                 else:
-                    tick_ctr = 0
+                    self.run = False
+                    self.correct = False
+
             # rms = self._signal_processing("right")
             # print(rms, self._left_clbr, self._right_clbr)
             # if rms > self._right_clbr:
@@ -187,6 +184,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -266,6 +264,7 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -311,6 +310,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -392,6 +392,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -503,6 +504,11 @@ class GUI:
     #             self.run = False
     #         pygame.display.update()
 
+    def __kill(self):
+        self.__queue.put(1)
+        pygame.quit()
+        exit()
+
 
 class Logic:
 
@@ -562,7 +568,11 @@ class Logic:
 
 
 class RMS:
-    def __init__(self):
+
+    _L_RMS_TIME = 0.25
+    _R_RMS_TIME = 1
+
+    def __init__(self, lock):
         buf_len = 128
         self._left_hand = Array('d', np.zeros(buf_len * 2))
         self._right_hand = Array('d', np.zeros(buf_len * 2))
@@ -574,19 +584,27 @@ class RMS:
 
     @property
     def left(self):
-        norm_sig = self._left_hand - np.mean(self._right_hand)
-        return np.sqrt(np.sum(norm_sig ** 2))
+        rms = 0
+        t_st = time.time()
+        while t_st - time.time() < self._L_RMS_TIME:
+            norm_sig = self._left_hand - np.mean(self._left_hand)
+            rms += np.sqrt(np.sum(norm_sig ** 2))
+        return rms/self._RMS_LEN
 
     @property
     def right(self):
-        norm_sig = self._right_hand - np.mean(self._right_hand)
-        return np.sqrt(np.sum(norm_sig ** 2))
+        rms = 0
+        t_st = time.time()
+        while t_st - time.time() < self._RMS_TIME:
+            norm_sig = self._right_hand - np.mean(self._right_hand)
+            rms += np.sqrt(np.sum(norm_sig ** 2))
+        return rms / self._RMS_LEN
 
 
 
 class Quiz:
 
-    def __init__(self, files):
+    def __init__(self, files, lock, queue):
         """Prepares quiz and draws questions.
 
         Args:
@@ -598,7 +616,7 @@ class Quiz:
         self._awards = [0, 1e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]  # wartości nagród za kolejne etapy
         self._score = 0  # na początku mamy 0 punktów
         self._maxScore = self._rounds * self._questionsInRounds
-        self._gui = GUI()  # tworzymy gui
+        self._gui = GUI(lock, queue)  # tworzymy gui
         self._files = files
 
 
@@ -647,18 +665,26 @@ class Quiz:
 
 # before this - KALIBRACJA
 if __name__ == "__main__":
-    q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_4.json', 'questions_stage_5.json'])
-
     lock = Lock()
-    processes_queue = mp.Queue() #TODO <---
+    processes_queue = mp.Queue()  # TODO <---
+    q = Quiz(['questions_stage_1.json',
+              'questions_stage_2.json',
+              'questions_stage_3.json',
+              'questions_stage_4.json',
+              'questions_stage_5.json'],
+             lock, processes_queue)
 
-    # Tutaj startują dwa procesy
     game_process = Process(target=q.quiz(),
                                args=())
     game_process.start()
 
-    # ----
-    #RMS
-    rms = RMS() # tu się zaczyna kolejny proces
+    # TODO
+    try:
+        while processes_queue.empty():
+            pass
+    except KeyboardInterrupt:
+        processes_queue.put(1)
+
+
 
 

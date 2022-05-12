@@ -36,8 +36,6 @@ class AmplifierConnection:
         self.__gains = np.array(self.__amp.current_description.channel_gains)
         self.__offsets = np.array(self.__amp.current_description.channel_offsets)
 
-
-
     def samples_to_microvolts(self, samples):
         return samples * self.__gains + self.__offsets
 
@@ -71,23 +69,22 @@ class SignalProcess:
     """
     _SAMPLING_RATE = 512
 
-    _CH_LIST = [0, 1, 2, 3]
+    _CH_LIST = [0, 1, 2, 4]
     _CALIBRATION_BOOST = 1.5
 
     def __init__(self, buf_len=128):
         self._amp_connection = AmplifierConnection(self._SAMPLING_RATE)
         self._buf_len = buf_len
 
-
     def start(self, process_lock, left_hand_sig, right_hand_sig):
-        #TODO
+        # TODO
         amp = self._amp_connection.amp
         amp.start_sampling()
         time.sleep(1)
         while True:
             try:
                 packet = amp.get_samples(self._buf_len)
-                samples = self._amp_conecction.samples_to_microvolts(packet.samples)
+                samples = self._amp_connection.samples_to_microvolts(packet.samples)
                 left_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
                 right_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
                 with process_lock:

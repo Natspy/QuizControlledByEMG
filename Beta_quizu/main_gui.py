@@ -4,8 +4,15 @@ import pygame
 import os
 import random
 import json
-from signal_processing import SignalProcess
 import time
+import numpy as np
+
+from multiprocessing import Process, Lock
+from multiprocessing.sharedctypes import Array
+import multiprocessing as mp
+
+from signal_processing import SignalProcess
+
 
 pygame.init()
 
@@ -26,10 +33,10 @@ class GUI:
         self.width = self.window.get_width()
         self.height = self.window.get_height()
         self._confirm_tick_len = 2
-        self._signal_processing = SignalProcess()
+        self._rms = RMS()
         # calibration properties
-        self._left_clbr = None
-        self._right_clbr = None
+        self._left_clbr = 2000
+        self._right_clbr = 3000
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -48,7 +55,7 @@ class GUI:
 
         # zmienna, ktora oznacza wybrana odp; default = 0
         chosen = 0
-
+        tick_ctr = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                  award, True, (0, 0, 0))
@@ -75,8 +82,9 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+
             # sterowanie mięśniami
-            if self._signal_processing("left") > self._left_clbr:
+            if self._rms.left > self._left_clbr:
                 chosen += 1
 
             chosen = chosen % 4
@@ -108,19 +116,29 @@ class GUI:
                             self.run = False
                             self.correct = False
 
-            rms = self._signal_processing("right")
-            print(rms, self._left_clbr, self._right_clbr)
-            if rms > self._right_clbr:
+            if self._rms.right > self._right_clbr:
                 tick_ctr += 1
-                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
                 if tick_ctr > self._confirm_tick_len:
                     if chosen == corr:
                         self.run = False
                     else:
                         self.run = False
                         self.correct = False
-            else:
-                tick_ctr = 0
+                else:
+                    tick_ctr = 0
+            # rms = self._signal_processing("right")
+            # print(rms, self._left_clbr, self._right_clbr)
+            # if rms > self._right_clbr:
+            #     tick_ctr += 1
+            #     # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+            #     if tick_ctr > self._confirm_tick_len:
+            #         if chosen == corr:
+            #             self.run = False
+            #         else:
+            #             self.run = False
+            #             self.correct = False
+            # else:
+            #     tick_ctr = 0
 
             # rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
@@ -177,8 +195,8 @@ class GUI:
                         self.run = False
                         self.close = True
 
-            if self._signal_processing("left") > self._left_clbr:
-                chosen += 1
+            # if self._signal_processing("left") > self._left_clbr:
+            #     chosen += 1
 
             if chosen > 1:
                 chosen = 0
@@ -203,21 +221,21 @@ class GUI:
                             self.close = True
                             break
 
-            rms = self._signal_processing("right")
-            if rms > self._right_clbr:
-                tick_ctr += 1
-                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
-                if tick_ctr > self._confirm_tick_len:
-                    if chosen == corr:
-                        color = (0, 128, 0)
-                        self.run = False
-                    else:
-                        color = (255, 0, 0)
-                        self.run = False
-                        self.close = True
-                        break
-            else:
-                tick_ctr = 0
+            # rms = self._signal_processing("right")
+            # if rms > self._right_clbr:
+            #     tick_ctr += 1
+            #     # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+            #     if tick_ctr > self._confirm_tick_len:
+            #         if chosen == corr:
+            #             color = (0, 128, 0)
+            #             self.run = False
+            #         else:
+            #             color = (255, 0, 0)
+            #             self.run = False
+            #             self.close = True
+            #             break
+            # else:
+            #     tick_ctr = 0
 
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
@@ -305,25 +323,25 @@ class GUI:
                         self.run = False
                         self.close = True
 
-            if self._signal_processing("left") > self._left_clbr:
-                chosen += 1
+            # if self._signal_processing("left") > self._left_clbr:
+            #     chosen += 1
 
             chosen = chosen % 3
 
-            rms = self._signal_processing("right")
-            if rms > self._right_clbr:
-                tick_ctr += 1
-                # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
-                if tick_ctr > self._confirm_tick_len:
-                    if chosen == chosen:
-                        color = (0, 128, 0)
-                        self.run = False
-                    else:
-                        self.run = False
-                        self.close = True
-                        break
-            else:
-                tick_ctr = 0
+            # rms = self._signal_processing("right")
+            # if rms > self._right_clbr:
+            #     tick_ctr += 1
+            #     # zatwierdzenie wymaga dłuższego zaciśnięcia ręki
+            #     if tick_ctr > self._confirm_tick_len:
+            #         if chosen == chosen:
+            #             color = (0, 128, 0)
+            #             self.run = False
+            #         else:
+            #             self.run = False
+            #             self.close = True
+            #             break
+            # else:
+            #     tick_ctr = 0
 
             button_location = [(button_pos_x, button_pos_y),
                                (button_pos_x, button_pos_y + 1.2 * button_height),
@@ -393,97 +411,97 @@ class GUI:
 
             pygame.display.update()
 
-    def calibration(self, calibration_time=5):
-        """
-        This method must be called before the .menu() method
-        if the menu is to be controlled by muscles
-        or after the .menu() if the menu
-        is to be controlled by keyboard.
-
-        Args:
-            calibration_time - in seconds
-        """
-        self.window = pygame.display.set_mode((1280, 720))
-        self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
-        self.button_size = (950, 80)
-
-        screen_txt = ["Kalibracja zaraz się zacznie",
-                      "Zaciśnij lewą rękę",
-                      'Rozluźnij lewą rękę',
-                      "Zaciśnij prawą rękę",
-                      'Rozluźnij prawą rękę',
-                      "Koniec kalibracji"]
-        #        break_ctr = 0
-        st_time = time.time()
-        tick_time = 0.001312732696533
-        l_flag = 0
-        r_flag = 0
-        while self.run:
-            # najpierw swiat
-            self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-            time_ctr = time.time() - st_time
-            print(time_ctr)
-            # zaraz zacznie się kalibracja
-
-            if time_ctr < 5:
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[0], True, (0, 0, 0))
-                self.window.blit(t, (200, 470))
-
-            # zaciśnij lewą rękę
-            elif time_ctr < 8:
-
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[1], True, (0, 0, 0))
-                self.window.blit(t, (200, 470))
-
-            elif l_flag == 0:
-                print("Dupa")
-                self._left_clbr = self._signal_processing.calibration(calibration_time, 0, 1)
-
-                print(self._left_clbr)
-                l_flag = 1
-                self.window.blit(t, (200, 470))
-
-            # rozluźnij
-
-            elif time_ctr < 13 + calibration_time:
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[2], True, (0, 0, 0))
-                self.window.blit(t, (200, 470))
-                time_stamp = tick_time
-
-            # zacisnij prawa
-            elif time_ctr < 16 + calibration_time:
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[3], True, (0, 0, 0))
-                self.window.blit(t, (200, 470))
-
-            elif r_flag == 0:
-                print("Dupa2")
-                self._right_clbr = self._signal_processing.calibration(calibration_time, 2, 3)
-                print(self._right_clbr)
-
-                r_flag = 1
-                self.window.blit(t, (200, 470))
-
-
-            elif time_ctr < 16 + 2 * calibration_time:
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[4], True, (0, 0, 0))
-
-                self.window.blit(t, (200, 470))
-
-
-            elif time_ctr < 21 + 2 * calibration_time:
-                t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
-                                            screen_txt[-1], True, (0, 0, 0))
-                self.window.blit(t, (200, 470))
-
-            else:
-                self.run = False
-            pygame.display.update()
+    # def calibration(self, calibration_time=5):
+    #     """
+    #     This method must be called before the .menu() method
+    #     if the menu is to be controlled by muscles
+    #     or after the .menu() if the menu
+    #     is to be controlled by keyboard.
+    #
+    #     Args:
+    #         calibration_time - in seconds
+    #     """
+    #     self.window = pygame.display.set_mode((1280, 720))
+    #     self.run = True
+    #     self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+    #     self.button_size = (950, 80)
+    #
+    #     screen_txt = ["Kalibracja zaraz się zacznie",
+    #                   "Zaciśnij lewą rękę",
+    #                   'Rozluźnij lewą rękę',
+    #                   "Zaciśnij prawą rękę",
+    #                   'Rozluźnij prawą rękę',
+    #                   "Koniec kalibracji"]
+    #     #        break_ctr = 0
+    #     st_time = time.time()
+    #     tick_time = 0.001312732696533
+    #     l_flag = 0
+    #     r_flag = 0
+    #     while self.run:
+    #         # najpierw swiat
+    #         self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
+    #         time_ctr = time.time() - st_time
+    #         print(time_ctr)
+    #         # zaraz zacznie się kalibracja
+    #
+    #         if time_ctr < 5:
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[0], True, (0, 0, 0))
+    #             self.window.blit(t, (200, 470))
+    #
+    #         # zaciśnij lewą rękę
+    #         elif time_ctr < 8:
+    #
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[1], True, (0, 0, 0))
+    #             self.window.blit(t, (200, 470))
+    #
+    #         elif l_flag == 0:
+    #             print("Dupa")
+    #             self._left_clbr = self._signal_processing.calibration(calibration_time, 0, 1)
+    #
+    #             print(self._left_clbr)
+    #             l_flag = 1
+    #             self.window.blit(t, (200, 470))
+    #
+    #         # rozluźnij
+    #
+    #         elif time_ctr < 13 + calibration_time:
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[2], True, (0, 0, 0))
+    #             self.window.blit(t, (200, 470))
+    #             time_stamp = tick_time
+    #
+    #         # zacisnij prawa
+    #         elif time_ctr < 16 + calibration_time:
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[3], True, (0, 0, 0))
+    #             self.window.blit(t, (200, 470))
+    #
+    #         elif r_flag == 0:
+    #             print("Dupa2")
+    #             self._right_clbr = self._signal_processing.calibration(calibration_time, 2, 3)
+    #             print(self._right_clbr)
+    #
+    #             r_flag = 1
+    #             self.window.blit(t, (200, 470))
+    #
+    #
+    #         elif time_ctr < 16 + 2 * calibration_time:
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[4], True, (0, 0, 0))
+    #
+    #             self.window.blit(t, (200, 470))
+    #
+    #
+    #         elif time_ctr < 21 + 2 * calibration_time:
+    #             t = pygame.font.Font.render(pygame.font.SysFont("calibri", 38),
+    #                                         screen_txt[-1], True, (0, 0, 0))
+    #             self.window.blit(t, (200, 470))
+    #
+    #         else:
+    #             self.run = False
+    #         pygame.display.update()
 
 
 class Logic:
@@ -543,6 +561,29 @@ class Logic:
         return self._correct
 
 
+class RMS:
+    def __init__(self):
+        buf_len = 128
+        self._left_hand = Array('d', np.zeros(buf_len * 2))
+        self._right_hand = Array('d', np.zeros(buf_len * 2))
+        signals = SignalProcess()
+        amplifier_process = Process(target=signals.start(), args=(lock,
+                                                                  self._left_hand,
+                                                                  self._right_hand))
+        amplifier_process.start()
+
+    @property
+    def left(self):
+        norm_sig = self._left_hand - np.mean(self._right_hand)
+        return np.sqrt(np.sum(norm_sig ** 2))
+
+    @property
+    def right(self):
+        norm_sig = self._right_hand - np.mean(self._right_hand)
+        return np.sqrt(np.sum(norm_sig ** 2))
+
+
+
 class Quiz:
 
     def __init__(self, files):
@@ -560,10 +601,12 @@ class Quiz:
         self._gui = GUI()  # tworzymy gui
         self._files = files
 
+
+
     def quiz(self):
         """ Starts the game.
         """
-        self._gui.calibration()
+        # self._gui.calibration()
         level = self._gui.menu()  # otwieramy menu i wybieramy poziom trudności
         if level == 0:  # najłatwiejsze
             self._logic = Logic(self._files[0:3])  # tworzymy logikę
@@ -603,5 +646,19 @@ class Quiz:
 # TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
 
 # before this - KALIBRACJA
-q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_4.json', 'questions_stage_5.json'])
-q.quiz()
+if __name__ == "__main__":
+    q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_4.json', 'questions_stage_5.json'])
+
+    lock = Lock()
+    processes_queue = mp.Queue() #TODO <---
+
+    # Tutaj startują dwa procesy
+    game_process = Process(target=q.quiz(),
+                               args=())
+    game_process.start()
+
+    # ----
+    #RMS
+    rms = RMS() # tu się zaczyna kolejny proces
+
+

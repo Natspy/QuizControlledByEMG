@@ -72,16 +72,16 @@ class GUI:
             chosen = chosen % 4
 
 
-            button_location = [(self.width/10, self.height/2),
-                               (self.width/10, self.height/2 + 1.2 * self.button_size[1]),
-                               (self.width/10, self.height/2 + 2.4 * self.button_size[1]),
-                               (self.width/10, self.height/2 + 3.6 * self.button_size[1])]
+            button_location = [(self.width / 10, self.height / 2),
+                               (self.width / 10, self.height / 2 + 1.2 * self.button_size[1]),
+                               (self.width / 10, self.height / 2 + 2.4 * self.button_size[1]),
+                               (self.width / 10, self.height / 2 + 3.6 * self.button_size[1])]
 
             # rysowanie:
             # najpierw swiat
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(0, 0, self.width, self.height / 15))  # prostokąt na górze
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect((self.width/10, self.height/5), (self.width * 0.6, self.height * 0.2)), border_radius=15)  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect((self.width / 10, self.height / 5), (self.width * 0.6, self.height * 0.2)), border_radius=15)  # rysowanie pola na pytanie
 
             # zaznaczamy szarym wybraną opcję
             pygame.draw.rect(self.window, (169, 169, 169), pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
@@ -107,10 +107,10 @@ class GUI:
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location_copy[1], self.button_size), border_radius=15)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location_copy[2], self.button_size), border_radius=15)
 
-            ans_location = [(self.width/9 + 0.015*self.button_size[0], button_location[0][1] + self.button_size[1]/2),
-                            (self.width/9 + 0.015*self.button_size[0], button_location[1][1] + self.button_size[1]/2),
-                            (self.width/9 + 0.015*self.button_size[0], button_location[2][1] + self.button_size[1]/2),
-                            (self.width/9 + 0.015*self.button_size[0], button_location[3][1] + self.button_size[1]/2)]
+            ans_location = [(self.width / 9 + 0.015 * self.button_size[0], button_location[0][1] + self.button_size[1] / 2),
+                            (self.width / 9 + 0.015 * self.button_size[0], button_location[1][1] + self.button_size[1] / 2),
+                            (self.width / 9 + 0.015 * self.button_size[0], button_location[2][1] + self.button_size[1] / 2),
+                            (self.width / 9 + 0.015 * self.button_size[0], button_location[3][1] + self.button_size[1] / 2)]
 
             # wpisywanie odpowiedzi w butony
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))
@@ -180,8 +180,8 @@ class GUI:
                             break
 
             ans_location = [
-                (button_location[0][0] + 0.015 * self.button_size[0], button_location[0][1] + self.button_size[1]/2),
-                (button_location[0][0] + 0.015 * self.button_size[0], button_location[1][1] + self.button_size[1]/2)]
+                (button_location[0][0] + 0.015 * self.button_size[0], button_location[0][1] + self.button_size[1] / 2),
+                (button_location[0][0] + 0.015 * self.button_size[0], button_location[1][1] + self.button_size[1] / 2)]
 
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
@@ -281,15 +281,15 @@ class GUI:
             pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
 
             # guzik pod pytanie
-            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect((self.width/10, self.height/5), (self.width * 0.6, self.height * 0.2)), border_radius=15)  # rysowanie pola na pytanie
+            pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect((self.width / 10, self.height / 5), (self.width * 0.6, self.height * 0.2)), border_radius=15)  # rysowanie pola na pytanie
 
             button_location.pop(chosen)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[0], self.button_size), border_radius=15)
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(button_location[1], self.button_size), border_radius=15)
 
-            ans_location = [(self.width/9+0.015*button_pos_x, button_pos_y + button_height/2),
-                            (self.width/9+0.015*button_pos_x, button_pos_y + button_height/2 + 1.2 * button_height),
-                            (self.width/9+0.015*button_pos_x, button_pos_y + button_height/2 + 2.4 * button_height)]
+            ans_location = [(self.width / 9 + 0.015 * button_pos_x, button_pos_y + button_height / 2),
+                            (self.width / 9 + 0.015 * button_pos_x, button_pos_y + button_height / 2 + 1.2 * button_height),
+                            (self.width / 9 + 0.015 * button_pos_x, button_pos_y + button_height / 2 + 2.4 * button_height)]
 
 
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))

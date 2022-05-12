@@ -567,7 +567,7 @@ class RMS:
         self._left_hand = Array('d', np.zeros(buf_len * 2))
         self._right_hand = Array('d', np.zeros(buf_len * 2))
         signals = SignalProcess()
-        amplifier_process = Process(target=signals.start(), args=(lock,
+        amplifier_process = Process(target=signals.start, args=(lock,
                                                                   self._left_hand,
                                                                   self._right_hand))
         amplifier_process.start()

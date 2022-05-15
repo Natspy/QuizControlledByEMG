@@ -23,6 +23,7 @@ class GUI:
         self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.width = self.window.get_width()
         self.height = self.window.get_height()
+        self.backgnd_path = "tlo_nowe.png"
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -36,7 +37,7 @@ class GUI:
         self.button_size = (0.6 * self.width, 0.08 * self.height)
 
         self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         color = (169, 169, 169)
 
         # zmienna, ktora oznacza wybrana odp; default = 0
@@ -124,7 +125,7 @@ class GUI:
     def keep_playing(self, awards, score):
 
         self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.button_size = (1000, 80)
 
         que = u'Przejść do kolejnego etapu?'
@@ -204,7 +205,7 @@ class GUI:
         """
 
         self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
 
         while self.run:
             text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40), display, True, (0, 0, 0))
@@ -238,7 +239,7 @@ class GUI:
         button_pos_x = self.width / 10
         button_pos_y = self.height / 2
         self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.button_size = (button_width, button_height)
 
         color = (169, 169, 169)
@@ -310,7 +311,7 @@ class GUI:
 
 
         self.run = True
-        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, "sea.jpg"))
+        self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.button_size = (950, 80)
 
         display_text1 = u'Poprawna odpowiedź!'

@@ -35,8 +35,8 @@ class GUI:
         self.__queue = queue
         self._rms = RMS(lock)
         # calibration properties
-        self._left_clbr = 2000
-        self._right_clbr = 3000
+        self._left_clbr = 10000
+        self._right_clbr = 10000
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -79,7 +79,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
+                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -212,7 +212,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
+                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -293,7 +293,7 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
-                    self.__kill()
+                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -339,7 +339,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
+                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -425,7 +425,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
+                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -499,6 +499,7 @@ class GUI:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                    calib_display_text[1], True, (0, 0, 0))
                 # self.window.blit(tight_hand, (0, 0))
+                self._left_clbr = self._rms.calibration("left")
 
             elif time.time() - st_time < 23:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
@@ -509,6 +510,7 @@ class GUI:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                    calib_display_text[3], True, (0, 0, 0))
                 # self.window.blit(tight_hand, (0, 0))
+                self._right_clbr = self._rms.calibration("right")
 
             elif time.time() - st_time < 33:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
@@ -623,8 +625,8 @@ class RMS:
 
         while time.time() - st_time <= calibration_time:
             self._lock.acquire()
-            rms += hands_signal(hand)
-            self.__lock.release()
+            rms += hands_signal[hand]
+            self._lock.release()
 
         return rms / rms_ctr
 
@@ -694,14 +696,14 @@ class Quiz:
 
 # before this - KALIBRACJA
 if __name__ == "__main__":
-    lock = Lock()
-    processes_queue = mp.Queue()  # TODO <---
+    process_lock = Lock()
+    processes_queue = mp.Queue()  # <---
     q = Quiz(['questions_stage_1.json',
               'questions_stage_2.json',
               'questions_stage_3.json',
               'questions_stage_4.json',
               'questions_stage_5.json'],
-             lock, processes_queue)
+             process_lock, processes_queue)
 
     game_process = Process(target=q.quiz(),
                            args=())
@@ -713,6 +715,3 @@ if __name__ == "__main__":
             pass
     except KeyboardInterrupt:
         processes_queue.put(1)
-q = Quiz(['questions_stage_1.json', 'questions_stage_2.json', 'questions_stage_3.json', 'questions_stage_4.json',
-          'questions_stage_5.json'])
-q.quiz()

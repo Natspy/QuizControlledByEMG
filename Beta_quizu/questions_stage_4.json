@@ -5,7 +5,7 @@
         "Który ocean leży między Europą a Ameryką?",
         "Czym są kwaśne deszcze?",
         "Jaką temperaturę ma woda na dnie jeziora?",
-        "Ile procent calej wody na świecie stanowi słodka woda?",
+        "Ile procent całej wody na świecie stanowi słodka woda?",
         "Dzięki jakemu zjawisku nartniki unoszą się na wodzie?",
         "Czy delfiny oddychają pod wodą jak ryby?",
         "Czym jest suchy lód?",
@@ -37,7 +37,7 @@
         [
             "Ocean Wesoły",
             "Ocean Indyjski",
-            "Ocean  Atlantycki",
+            "Ocean Atlantycki",
             "Pacyfik"
         ],
         [
@@ -47,10 +47,10 @@
             "Ocean Chiński"
         ],
         [
-            "opady żółtego śniegu",
-            "deszcz żab",
-            "opady atmosferyczne o odczynie kwasowym",
-            "opady kwasu ozonowego"
+            "Opady żółtego śniegu",
+            "Deszcz żab",
+            "Opady atmosferyczne o odczynie kwasowym",
+            "Opady kwasu ozonowego"
         ],
         [
             "88 ° C",
@@ -65,22 +65,22 @@
             "9 %"
         ],
         [
-            "adhezja",
-            "kohezja",
-            "grawitacja",
-            "siły van der Waalsa"
+            "Adhezja",
+            "Kohezja",
+            "Grawitacja",
+            "Oddziaływania van der Waalsa"
         ],
         [
-            "nie, muszą czasem wypływać na powierzchnię",
-            "tak",
-            "mogą oddychać i pod wodą i na lądzie",
-            "delfiny nie oddychają"
+            "Nie, muszą czasem wypływać na powierzchnię",
+            "Tak",
+            "Mogą oddychać i pod wodą, i na powierzchni",
+            "Delfiny nie oddychają"
         ],
         [
-            "zamrożony kwas azotowy",
-            "woda w temperaturze -100°C",
-            "lód na powierzchni jeziora",
-            "zestalony dwutlenek węgla"
+            "Zamrożony kwas azotowy",
+            "Woda w temperaturze -100°C",
+            "Lód na powierzchni jeziora",
+            "Zestalony dwutlenek węgla"
         ],
         [
             "100 °C",
@@ -95,10 +95,10 @@
             "0,1 % wody w organiźmie"
         ],
         [
-            "w słodkiej i słonej",
-            "w słodkiej",
-            "w słonej",
-            "rekiny nie żyją w wodzie"
+            "W słodkiej i słonej",
+            "W słodkiej",
+            "W słonej",
+            "Rekiny nie żyją w wodzie"
         ]
     ]
 }

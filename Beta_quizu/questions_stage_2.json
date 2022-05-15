@@ -31,10 +31,10 @@
     ],
     "options": [
         [
-            "wodór i chlor",
-            "siarka i tlen",
-            "wodór i tlen",
-            "tlen i węgiel"
+            "Wodór i chlor",
+            "Siarka i tlen",
+            "Wodór i tlen",
+            "Tlen i węgiel"
         ],
         [
             "Wisła",
@@ -49,22 +49,22 @@
             "Morze Biało-Czerowne"
         ],
         [
-            "ok. 70%",
-            "ok. 20%",
-            "ok. 90%",
-            "ok. 50%"
+            "Około 70%",
+            "Około 20%",
+            "Około 90%",
+            "Około 50%"
         ],
         [
-            "zamarzniętą wodą z oceanu",
-            "masą lodu powstałą z nagromadzonego śniegu",
-            "górami pokrytymi śniegiem",
-            "żadnym z wymienionych"
+            "Zamarzniętą wodą z oceanu",
+            "Masą lodu powstałą z nagromadzonego śniegu",
+            "Górami pokrytymi śniegiem",
+            "Żadnym z wymienionych"
         ],
         [
-            "singletonem",
-            "dipolem",
-            "tripolem",
-            "kwadrupolem"
+            "Singletonem",
+            "Dipolem",
+            "Tripolem",
+            "Kwadrupolem"
         ],
         [
             "Żuławy Wiślane",
@@ -75,38 +75,38 @@
         [
             "1 dzień",
             "4 do 7 dni",
-            "około 12 dni",
+            "Około 12 dni",
             "3 tygodnie"
         ],
         [
-            "gigantyczną falą",
-            "ulewnym deszczem",
-            "typem statku",
-            "wiatrem nadchodzącym ze zbiornika wodnego"
+            "Gigantyczną falą",
+            "Ulewnym deszczem",
+            "Typem statku",
+            "Wiatrem nadchodzącym ze zbiornika wodnego"
         ],
         [
-            "ssaki",
-            "płazy",
-            "ryby",
-            "gady"
+            "Ssaki",
+            "Płazy",
+            "Ryby",
+            "Gady"
         ],
         [
-            "ujście",
-            "meander",
-            "źródło",
-            "delta rzeki"
+            "Ujście",
+            "Meander",
+            "Źródło",
+            "Delta rzeki"
         ],
         [
-            "imago",
-            "ikra",
-            "płazki",
-            "skrzek"
+            "Imago",
+            "Ikra",
+            "Płazki",
+            "Skrzek"
         ],
         [
-            "ikra",
-            "skrzek",
-            "rybiki",
-            "imago"
+            "Ikra",
+            "Skrzek",
+            "Rybiki",
+            "Imago"
         ]
     ]
 }

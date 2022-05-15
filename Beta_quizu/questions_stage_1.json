@@ -9,7 +9,7 @@
         "Czym żywi się płetwal błękitny?",
         "Skąd bierze się woda w kranie?",
         "Jaką wodę używamy do picia, mycia i gotowania?",
-        "Co oznacza, że któś robi \"burzę w szklance wody\"?",
+        "Co oznacza, że ktoś robi \"burzę w szklance wody\"?",
         "Do jakiej grupy zwierząt należą wieloryby?",
         "Który kontynent jest najsuchszy?",
         "Ile wody dziennie powinien wypijać dorosły człowiek?",
@@ -33,22 +33,22 @@
     ],
     "options": [
         [
-            "jest za gęsta",
-            "jest słona i niezdrowa",
-            "jest zbyt zimna",
-            "jest zbyt przejrzysta"
+            "Jest za gęsta",
+            "Jest słona i niezdrowa",
+            "Jest zbyt zimna",
+            "Jest zbyt przejrzysta"
         ],
         [
-            "temperatury",
-            "nacisku",
-            "grawitacji",
-            "siły elektrostatycznej"
+            "Temperatury",
+            "Nacisku",
+            "Grawitacji",
+            "Siły elektrostatycznej"
         ],
         [
-            "lód",
-            "cola",
-            "para wodna",
-            "wodór"
+            "Lód",
+            "Cola",
+            "Para wodna",
+            "Wodór"
         ],
         [
             "- 100 ° C",
@@ -63,40 +63,40 @@
             "100 ° C"
         ],
         [
-            "kra skalna",
-            "kra litosfery",
-            "kra lodowcowa",
-            "kra lodowa"
+            "Kra skalna",
+            "Kra litosfery",
+            "Kra lodowcowa",
+            "Kra lodowa"
         ],
         [
-            "fotosyntezą",
-            "wodorostami",
-            "planktonem",
-            "nektonem"
+            "Za pomocą fotosyntezy",
+            "Wodorostami",
+            "Planktonem",
+            "Nektonem"
         ],
         [
-            "z morza",
-            "z wód gromadzących się pod ziemią",
-            "z deszczówki",
-            "z roztopionego śniegu"
+            "Z morza",
+            "Z wód gromadzących się pod ziemią",
+            "Z deszczówki",
+            "Z roztopionego śniegu"
         ],
         [
-            "słodka",
-            "kolońska",
-            "utleniona",
-            "słona"
+            "Słodka",
+            "Kolońska",
+            "Utleniona",
+            "Słona"
         ],
         [
-            "przeprowadza eksperymenty w probówce",
-            "chwali kogoś z błahego powodu",
-            "łączy ocet z sodą oczyszczoną",
-            "robi awanturę z błahego powodu"
+            "Przeprowadza eksperymenty w probówce",
+            "Chwali kogoś z błahego powodu",
+            "Łączy ocet z sodą oczyszczoną",
+            "Robi awanturę z błahego powodu"
         ],
         [
-            "ssaki",
-            "płazy",
-            "ryby",
-            "gady"
+            "Ssaki",
+            "Płazy",
+            "Ryby",
+            "Gady"
         ],
         [
             "Afryka",
@@ -106,15 +106,15 @@
         ],
         [
             "100 ml",
-            "około 2,5 litra",
+            "Około 2,5 litra",
             "10 litrów",
-            "jedną puszkę"
+            "Jedną puszkę"
         ],
         [
-            "cztery",
-            "siedem",
-            "osiem",
-            "dziewięć"
+            "Cztery",
+            "Siedem",
+            "Osiem",
+            "Dziewięć"
         ]
     ]
 }

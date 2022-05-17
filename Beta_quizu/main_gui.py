@@ -481,10 +481,10 @@ class GUI:
             fish_placement = (3 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
-            self.window.blit(display1, display1.get_rect(midleft=(self.message_size[0]*10/8,
-                                                                  self.message_size[1]+self.message_size[3] / 2 - 20)))
-            self.window.blit(display2, display2.get_rect(midleft=(self.message_size[0]*10/8,
-                                                                  self.message_size[1]+self.message_size[3] / 2 + 20)))
+            self.window.blit(display1, display1.get_rect(midleft=(self.message_size[0] * 10 / 8,
+                                                                  self.message_size[1] + self.message_size[3] / 2 - 20)))
+            self.window.blit(display2, display2.get_rect(midleft=(self.message_size[0] * 10 / 8,
+                                                                  self.message_size[1] + self.message_size[3] / 2 + 20)))
 
             pygame.display.update()
 

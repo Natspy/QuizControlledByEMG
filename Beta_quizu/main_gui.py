@@ -433,7 +433,7 @@ class GUI:
         # palm_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         # tight_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         start_display_text = [u'Kalibracja zaraz się rozpocznie.',
-                              u'Postępuj zgodnie z instrukcjami na ekranie']
+                              u'Instrukcje pojawią się na ekranie']
 
         calib_display_text = [u'Rozluźnij ręce',
                               u'Zaciśnij lewą rękę',
@@ -476,6 +476,11 @@ class GUI:
                                                    start_display_text[0], True, (0, 0, 0))
                 display2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                    start_display_text[1], True, (0, 0, 0))
+
+                pygame.draw.rect(self.window, (255, 255, 255),
+                                 pygame.Rect((self.width / 10, self.height / 5),
+                                             (self.width * 0.6, self.height * 0.3)),
+                                 border_radius=15)  # rysowanie pola na pytanie
 
             elif time.time() - st_time < 13:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),

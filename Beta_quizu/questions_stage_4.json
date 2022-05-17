@@ -11,7 +11,8 @@
         "Czym jest suchy lód?",
         "W jakiej temperaturze wrze woda na szczycie Mount Everest?",
         "Uczucie pragnienia pojawia się gdy człowiek straci:",
-        "W jakiej wodzie żyją rekiny?"
+        "W jakiej wodzie żyją rekiny?",
+        "Cząsteczka wody jest:"
     ],
     "answer": [
         1,
@@ -25,7 +26,8 @@
         3,
         3,
         0,
-        2
+        2,
+        1
     ],
     "options": [
         [
@@ -99,6 +101,12 @@
             "W słodkiej",
             "W słonej",
             "Rekiny nie żyją w wodzie"
+        ],
+        [
+            "Singletonem",
+            "Dipolem",
+            "Tripolem",
+            "Kwadrupolem"
         ]
     ]
 }

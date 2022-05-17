@@ -32,6 +32,8 @@ class GUI:
         self.width = self.window.get_width()
         self.height = self.window.get_height()
         self.backgnd_path = "tlo_nowe.png"
+        self.fish_path = "rybcia.png"
+        self.fish = pygame.image.load(os.path.join(self.path, self.fish_path))
         self.__queue = queue
         self._rms = RMS(lock)
         # calibration properties
@@ -51,6 +53,7 @@ class GUI:
 
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
+
         color = (169, 169, 169)
 
         # zmienna, ktora oznacza wybrana odp; default = 0
@@ -108,6 +111,7 @@ class GUI:
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect(0, 0, self.width, self.height / 15))  # prostokąt na górze
+
 
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect((self.width / 10, self.height / 5),
@@ -176,6 +180,9 @@ class GUI:
             self.window.blit(ANS4, ANS4.get_rect(midleft=(ans_location[3][0],
                                                           ans_location[3][1])))
 
+            fish_placement = (3*self.width/4, self.height/15)
+            self.window.blit(self.fish, fish_placement)
+
             self.window.blit(QUESTION, que_placement)
             self.window.blit(score_text, score_text_centr)  # rysowanie okienka z wynikiem
             pygame.display.update()
@@ -230,16 +237,15 @@ class GUI:
 
             # prostokąt na górze
             pygame.draw.rect(self.window, (255, 255, 255),
-                             pygame.Rect(0, 0, self.width, self.height / 15))
-
-            pygame.draw.rect(self.window, (255, 255, 255),
-                             pygame.Rect(150, 200, 950, 150),
+                             pygame.Rect((self.width / 10, self.height / 5),
+                                         (self.width * 0.6, self.height * 0.2)),
                              border_radius=15)
 
             button_location = [(125, 450), (125, 550)]
 
             pygame.draw.rect(self.window, (169, 169, 169),
                              pygame.Rect(button_location[chosen], self.button_size), border_radius=15)
+
             # czy wybrana odpowiedz jest poprawna?
             for event in events:
                 if event.type == pygame.KEYDOWN:
@@ -267,6 +273,15 @@ class GUI:
                              pygame.Rect(button_location[0], self.button_size),
                              border_radius=15)
 
+
+            pygame.draw.rect(self.window, (255, 255, 255),
+                             pygame.Rect((self.width / 10, self.height / 5),
+                                         (self.width * 0.6, self.height * 0.2)),
+                             border_radius=15)  # rysowanie pola na pytanie
+
+            fish_placement = (3 * self.width / 4, self.height / 15)
+            self.window.blit(self.fish, fish_placement)
+
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))
             self.window.blit(ANS2, ANS2.get_rect(midleft=(ans_location[1][0], ans_location[1][1])))
             self.window.blit(QUESTION, QUESTION.get_rect(center=(625, 275)))
@@ -285,6 +300,7 @@ class GUI:
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
 
+
         while self.run:
             text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40), display, True, (0, 0, 0))
 
@@ -299,9 +315,14 @@ class GUI:
                         self.run = False
                         self.close = True
 
+
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius=15)
             self.window.blit(text, text.get_rect(center=(650, 275)))
+
+            fish_placement = (3 * self.width / 4, self.height / 15)
+            self.window.blit(self.fish, fish_placement)
+
             pygame.display.update()
 
     def menu(self):
@@ -395,6 +416,9 @@ class GUI:
                             (self.width / 9 + 0.015 * button_pos_x,
                              button_pos_y + button_height / 2 + 2.4 * button_height)]
 
+            fish_placement = (3 * self.width / 4, self.height / 15)
+            self.window.blit(self.fish, fish_placement)
+
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))
             self.window.blit(ANS2, ANS2.get_rect(midleft=(ans_location[1][0], ans_location[1][1])))
             self.window.blit(ANS3, ANS3.get_rect(midleft=(ans_location[2][0], ans_location[2][1])))
@@ -439,6 +463,9 @@ class GUI:
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 950, 150), border_radius=15)
 
+            fish_placement = (3 * self.width / 4, self.height / 15)
+            self.window.blit(self.fish, fish_placement)
+
             self.window.blit(display1, (200, 235))
             self.window.blit(display2, (200, 300))
 
@@ -458,7 +485,7 @@ class GUI:
                               u'Zaciśnij prawą rękę',
                               u'Rozluźnij prawą rękę']
 
-        end_display_text = [u'Dziękujęmy.',
+        end_display_text = [u'Dziękujemy.',
                             u'Za chwilę rozpocznie się gra']
 
         display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
@@ -481,6 +508,13 @@ class GUI:
                         self.close = True
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
+
+
+            pygame.draw.rect(self.window, (255, 255, 255),
+                             pygame.Rect((self.width / 10, self.height / 5),
+                                         (self.width * 0.6, self.height * 0.2)),
+                             border_radius=15)  # rysowanie pola na pytanie
+
             if time.time() - st_time < 8:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48),
                                                    start_display_text[0], True, (0, 0, 0))
@@ -524,6 +558,9 @@ class GUI:
 
             else:
                 self.run = False
+
+            fish_placement = (3 * self.width / 4, self.height / 15)
+            self.window.blit(self.fish, fish_placement)
 
             self.window.blit(display1, (200, 235))
             self.window.blit(display2, (200, 300))

@@ -17,7 +17,7 @@ pygame.init()
 
 
 class GUI:
-    def __init__(self, queue, lock):
+    def __init__(self, lock, queue):
         """_summary_
         """
 
@@ -34,8 +34,11 @@ class GUI:
         self.backgnd_path = "tlo_nowe.png"
         self.fish_path = "rybcia.png"
         self.fish = pygame.image.load(os.path.join(self.path, self.fish_path))
+        # sygnały
         self.__queue = queue
         self._rms = RMS(lock)
+        self._move_ticks = 8
+        self._confirm_ticks = 20
         # calibration properties
         self._left_clbr = 10000
         self._right_clbr = 10000
@@ -58,6 +61,8 @@ class GUI:
 
         # zmienna, ktora oznacza wybrana odp; default = 0
         chosen = 0
+        confirm_ctr = 0
+        move_ctr = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40),
                                                  award, True, (0, 0, 0))
@@ -82,7 +87,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    # self.__kill()
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -90,17 +95,19 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
-                chosen += 1
+                if move_ctr > self._move_ticks:
+                    chosen += 1
+                    time.sleep(0.2)
+                move_ctr += 1
+            else:
+                move_ctr = 0
 
             chosen = chosen % 4
 
-            button_location = [(self.width / 10, self.height / 2),
-                               (self.width / 10, self.height / 2 + 1.2 * self.button_size[1]),
-                               (self.width / 10, self.height / 2 + 2.4 * self.button_size[1]),
-                               (self.width / 10, self.height / 2 + 3.6 * self.button_size[1])]
             button_location = [(self.width / 10, self.height / 2),
                                (self.width / 10, self.height / 2 + 1.2 * self.button_size[1]),
                                (self.width / 10, self.height / 2 + 2.4 * self.button_size[1]),
@@ -111,7 +118,6 @@ class GUI:
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect(0, 0, self.width, self.height / 15))  # prostokąt na górze
-
 
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect((self.width / 10, self.height / 5),
@@ -136,11 +142,21 @@ class GUI:
                             self.correct = False
 
             if self._rms.right > self._right_clbr:
-                if chosen == corr:
-                    self.run = False
-                else:
-                    self.run = False
-                    self.correct = False
+                color = (130, 130, 130)
+                if confirm_ctr > self._confirm_ticks:
+                    if chosen == corr:
+                        color = (0, 128, 0)
+                        self.run = False
+                    else:
+                        color = (255, 0, 0)
+                        self.run = False
+                        self.correct = False
+
+                confirm_ctr += 1
+
+            else:
+                confirm_ctr = 0
+                color = (169, 169, 169)
 
             # rysowanie okienka w nowym kolorze w zaleznosci od poprawnosci odpowiedzi
             pygame.draw.rect(self.window, color,
@@ -180,12 +196,13 @@ class GUI:
             self.window.blit(ANS4, ANS4.get_rect(midleft=(ans_location[3][0],
                                                           ans_location[3][1])))
 
-            fish_placement = (3*self.width/4, self.height/15)
+            fish_placement = (3 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(QUESTION, que_placement)
             self.window.blit(score_text, score_text_centr)  # rysowanie okienka z wynikiem
             pygame.display.update()
+        time.sleep(1)
 
     def keep_playing(self, awards, score):
 
@@ -199,6 +216,8 @@ class GUI:
         corr = 0
         chosen = 0
         color = (169, 169, 169)
+        move_ctr = 0
+        confirm_ctr = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40),
                                                  u'Aktualna nagroda: {} zł'.format(
@@ -218,7 +237,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    # self.__kill()
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -226,9 +245,16 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
+            # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
-                chosen += 1
+                if move_ctr > self._move_ticks:
+                    chosen += 1
+                    time.sleep(0.25)
+                move_ctr += 1
+            else:
+                move_ctr = 0
 
             if chosen > 1:
                 chosen = 0
@@ -257,7 +283,25 @@ class GUI:
                             color = (255, 0, 0)
                             self.run = False
                             self.close = True
+                            self.__kill()
                             break
+
+            if self._rms.right > self._right_clbr:
+                color = (130, 130, 130)
+                if confirm_ctr > self._confirm_ticks:
+                    if chosen == corr:
+                        color = (0, 128, 0)
+                        self.run = False
+                    else:
+                        color = (255, 0, 0)
+                        self.run = False
+                        self.correct = False
+                        break
+                confirm_ctr += 1
+
+            else:
+                confirm_ctr = 0
+                color = (169, 169, 169)
 
             ans_location = [
                 (button_location[0][0] + 0.015 * self.button_size[0], button_location[0][1] + self.button_size[1] / 2),
@@ -273,7 +317,6 @@ class GUI:
                              pygame.Rect(button_location[0], self.button_size),
                              border_radius=15)
 
-
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect((self.width / 10, self.height / 5),
                                          (self.width * 0.6, self.height * 0.2)),
@@ -288,6 +331,7 @@ class GUI:
             self.window.blit(score_text, score_text_centr)
 
             pygame.display.update()
+        time.sleep(1)
 
     def ending(self, display):
         """
@@ -299,7 +343,6 @@ class GUI:
 
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
-
 
         while self.run:
             text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40), display, True, (0, 0, 0))
@@ -314,7 +357,7 @@ class GUI:
                     if event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-
+                        self.__kill()
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
             pygame.draw.rect(self.window, (255, 255, 255), pygame.Rect(150, 200, 1000, 150), border_radius=15)
@@ -348,6 +391,8 @@ class GUI:
         que = u'Jesteś gotowy? Wybierz poziom'
         ans = [u'Poziom 1: wiek 7 - 12', u'Poziom 2: wiek 13 - 18', u'Poziom 3: dorośli']
 
+        confirm_ctr = 0
+        move_ctr = 0
         while self.run:
             QUESTION = pygame.font.Font.render(pygame.font.SysFont(self.font, 50), que, True, (0, 0, 0))
             ANS1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 38), ans[0], True, (0, 0, 0))
@@ -359,7 +404,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    # self.__kill()
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -371,16 +416,30 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
+            # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
-                chosen += 1
+                if move_ctr > self._move_ticks:
+                    chosen += 1
+                    time.sleep(0.18)
+                move_ctr += 1
+            else:
+                move_ctr = 0
 
             chosen = chosen % 3
 
             if self._rms.right > self._right_clbr:
-                self.level = chosen
-                color = (0, 128, 0)
-                self.run = False
+                color = (130, 130, 130)
+                if confirm_ctr > self._confirm_ticks:
+                    self.level = chosen
+                    color = (0, 128, 0)
+                    self.run = False
+                confirm_ctr += 1
+
+            else:
+                confirm_ctr = 0
+                color = (169, 169, 169)
 
             button_location = [(button_pos_x, button_pos_y),
                                (button_pos_x, button_pos_y + 1.2 * button_height),
@@ -424,6 +483,7 @@ class GUI:
             self.window.blit(ANS3, ANS3.get_rect(midleft=(ans_location[2][0], ans_location[2][1])))
             self.window.blit(QUESTION, QUESTION.get_rect(center=(self.width * 0.4, self.height * 0.3)))
             pygame.display.update()
+        time.sleep(1)
 
         return self.level
 
@@ -442,13 +502,14 @@ class GUI:
         display_text1 = u'Poprawna odpowiedź!'
         display_text2 = u'Ściśnij prawą ręke, by kontynuować'
 
+        confirm_ctr = 0
         while self.run:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    # self.__kill()
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -456,6 +517,16 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
+
+            # sterowanie mięśniami
+            if self._rms.right > self._right_clbr:
+                if confirm_ctr > self._confirm_ticks - 15:
+                    self.run = False
+                    confirm_ctr = 0
+                confirm_ctr += 1
+            else:
+                confirm_ctr = 0
 
             display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), display_text1, True, (0, 0, 0))
             display2 = pygame.font.Font.render(pygame.font.SysFont(self.font, 20), display_text2, True, (0, 0, 0))
@@ -470,6 +541,7 @@ class GUI:
             self.window.blit(display2, (200, 300))
 
             pygame.display.update()
+        time.sleep(1)
 
     def calibration(self):
         self.run = True
@@ -499,6 +571,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -506,9 +579,9 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
-
 
             pygame.draw.rect(self.window, (255, 255, 255),
                              pygame.Rect((self.width / 10, self.height / 5),
@@ -566,6 +639,11 @@ class GUI:
             self.window.blit(display2, (200, 300))
 
             pygame.display.update()
+
+    def __kill(self):
+        self.__queue.put(1)
+        pygame.quit()
+        exit()
 
 
 class Logic:
@@ -629,6 +707,7 @@ class RMS:
     _L_RMS_TIME = 0.25
     _R_RMS_TIME = 1
     _BUF_LEN = 128
+    _SAMPLING_RATE = 512
 
     def __init__(self, lock):
         self._left_hand = Array('d', np.zeros(self._BUF_LEN * 2))
@@ -643,12 +722,18 @@ class RMS:
 
     @property
     def left(self):
+        self._lock.acquire()
         norm_sig = self._left_hand - np.mean(self._left_hand)
+        self._lock.release()
+        print("rms lewa: ", np.sqrt(np.sum(norm_sig ** 2)))
         return np.sqrt(np.sum(norm_sig ** 2))
 
     @property
     def right(self):
+        self._lock.acquire()
         norm_sig = self._right_hand - np.mean(self._right_hand)
+        self._lock.release()
+        print("rms prawa: ", np.sqrt(np.sum(norm_sig ** 2)))
         return np.sqrt(np.sum(norm_sig ** 2))
 
     def calibration(self, hand, calibration_time=5):
@@ -657,12 +742,10 @@ class RMS:
 
         rms = 0
         rms_ctr = 0
-        st_time = time.time()
-
-        while time.time() - st_time <= calibration_time:
-            self._lock.acquire()
+        rms_samples = calibration_time * self._SAMPLING_RATE / self._BUF_LEN
+        while rms_ctr < rms_samples:
             rms += hands_signal[hand]
-            self._lock.release()
+            rms_ctr += 1
 
         return rms / rms_ctr
 

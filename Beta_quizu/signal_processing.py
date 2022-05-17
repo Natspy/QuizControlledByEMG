@@ -47,25 +47,6 @@ class AmplifierConnection:
 class SignalProcess:
     """
     EMG signal processing class
-
-    By the __call__ method you will get the RMS value
-    of the selected hand in the method argument.
-
-    Example of usage:
-        1. Create class instance in your code, for example:
-            signal_processing = SignalProcess()
-
-        2. To calibrate muscle "squeeze" threshold:
-            signal_processing.calibration(time, ch1, ch2)
-                time - calibration time in seconds
-                ch1, ch2 - idx of channels from self._CH_LIST
-                    - 0, 1 for left hand
-                    - 2, 3 for right hand
-
-        3. To get RMS of selected hand:
-            signal_processing("left")
-        or
-            signal_processing("right")
     """
     _SAMPLING_RATE = 512
 
@@ -77,7 +58,6 @@ class SignalProcess:
         self._buf_len = buf_len
 
     def start(self, process_lock, left_hand_sig, right_hand_sig):
-        # TODO
         amp = self._amp_connection.amp
         amp.start_sampling()
         time.sleep(1)
@@ -88,7 +68,6 @@ class SignalProcess:
                 left_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
                 right_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
                 with process_lock:
-                    # TODO samples_array inny rozmiar
                     left_hand_sig[:-self._buf_len] = left_hand_sig[self._buf_len:]
                     left_hand_sig[-self._buf_len:] = Array('d', left_hand)
                     right_hand_sig[:-self._buf_len] = right_hand_sig[self._buf_len:]

@@ -94,7 +94,6 @@ class GUI:
 
             chosen = chosen % 4
 
-
             button_location = [(self.width / 10, self.height / 2),
                                (self.width / 10, self.height / 2 + 1.2 * self.button_size[1]),
                                (self.width / 10, self.height / 2 + 2.4 * self.button_size[1]),

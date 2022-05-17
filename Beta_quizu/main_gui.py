@@ -496,7 +496,7 @@ class GUI:
         # palm_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         # tight_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         start_display_text = [u'Kalibracja zaraz się rozpocznie.',
-                              u'Postępuj zgodnie z instrukcjami na ekranie']
+                              u'Instrukcje pojawią się na ekranie']
 
         calib_display_text = [u'Rozluźnij ręce',
                               u'Zaciśnij lewą rękę',

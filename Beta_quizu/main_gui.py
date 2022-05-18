@@ -28,7 +28,8 @@ class GUI:
         self.close = False
         self.color = (169, 169, 169)
         self.font = "Comic Sans MS"
-        self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.window = pygame.display.set_mode((1366, 768))
         self.width = self.window.get_width()
         self.height = self.window.get_height()
         self.backgnd_path = "tlo_nowe.png"

@@ -66,6 +66,7 @@ class GUI:
         chosen = 0
         confirm_ctr = 0
         move_ctr = 0
+        left_block = 0
         while self.run:
             score_text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40),
                                                  award, True, (0, 0, 0))
@@ -101,12 +102,13 @@ class GUI:
 
             # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
-                if move_ctr > self._move_ticks:
+                if move_ctr > self._move_ticks and left_block == 0:
                     chosen += 1
-                    time.sleep(0.1)
+                    left_block = 1
                 move_ctr += 1
             else:
                 move_ctr = 0
+                left_block = 0
 
             chosen = chosen % 4
 

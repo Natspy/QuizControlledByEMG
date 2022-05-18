@@ -278,7 +278,6 @@ class GUI:
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
-
             button_location = [(self.width / 10, self.height / 2),
                                (self.width / 10, self.height / 2 + 1.2 * self.button_size[1])]
 
@@ -369,7 +368,6 @@ class GUI:
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.question_size = (self.width / 10, self.height / 5, self.width * 0.6, self.height * 0.2)
 
-
         while self.run:
             text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40), display, True, (0, 0, 0))
 
@@ -382,7 +380,6 @@ class GUI:
                     if event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
@@ -590,9 +587,11 @@ class GUI:
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(display1, display1.get_rect(midleft=(self.message_size[0] * 10 / 8,
-                                                                  self.message_size[1] + self.message_size[3] / 2 - 20)))
+                                                                  self.message_size[1] + self.message_size[
+                                                                      3] / 2 - 20)))
             self.window.blit(display2, display2.get_rect(midleft=(self.message_size[0] * 10 / 8,
-                                                                  self.message_size[1] + self.message_size[3] / 2 + 20)))
+                                                                  self.message_size[1] + self.message_size[
+                                                                      3] / 2 + 20)))
 
             pygame.display.update()
 
@@ -831,6 +830,7 @@ class Quiz:
             if self._gui.correct and not self._gui.close:
                 self._gui.ending(u'Wygrana! Zostajesz milionerem!!!')
 
+
 class RMS:
     _L_RMS_TIME = 0.25
     _R_RMS_TIME = 1
@@ -847,7 +847,7 @@ class RMS:
                                           self._left_hand,
                                           self._right_hand))
         amplifier_process.start()
-        self._b, self._a = butter(3, 20/(self._SAMPLING_RATE/2), "highpass")
+        self._b, self._a = butter(3, 20 / (self._SAMPLING_RATE / 2), "highpass")
         self._zl = lfilter_zi(self._b, self._a)
         self._zr = lfilter_zi(self._b, self._a)
 

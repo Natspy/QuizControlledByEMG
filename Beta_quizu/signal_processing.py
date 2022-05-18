@@ -50,8 +50,7 @@ class SignalProcess:
     """
     _SAMPLING_RATE = 512
 
-    _CH_LIST = [0, 1, 2, 4]
-    _CALIBRATION_BOOST = 1.5
+    _CH_LIST = [0, 1, 2, 3]
 
     def __init__(self, buf_len=128):
         self._amp_connection = AmplifierConnection(self._SAMPLING_RATE)
@@ -66,7 +65,7 @@ class SignalProcess:
                 packet = amp.get_samples(self._buf_len)
                 samples = self._amp_connection.samples_to_microvolts(packet.samples)
                 left_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
-                right_hand = samples[:, self._CH_LIST[0]] - samples[:, self._CH_LIST[1]]
+                right_hand = samples[:, self._CH_LIST[2]] - samples[:, self._CH_LIST[3]]
                 with process_lock:
                     left_hand_sig[:-self._buf_len] = left_hand_sig[self._buf_len:]
                     left_hand_sig[-self._buf_len:] = Array('d', left_hand)

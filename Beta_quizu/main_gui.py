@@ -6,6 +6,7 @@ import random
 import json
 import time
 import numpy as np
+from scipy.signal import butter, lfilter, lfilter_zi
 
 from multiprocessing import Process, Lock
 from multiprocessing.sharedctypes import Array
@@ -22,7 +23,6 @@ class GUI:
         """
 
         self.path = os.path.dirname(__file__)
-        # self.clock = 0 mozna wywalic i guess ale jeszcze nie jestem pewna
         self.level = 0
         self.correct = True
         self.close = False
@@ -40,8 +40,8 @@ class GUI:
         self._move_ticks = 8
         self._confirm_ticks = 20
         # calibration properties
-        self._left_clbr = 10000
-        self._right_clbr = 10000
+        self._left_clbr = 3000
+        self._right_clbr = 3000
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -87,7 +87,6 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -101,7 +100,7 @@ class GUI:
             if self._rms.left > self._left_clbr:
                 if move_ctr > self._move_ticks:
                     chosen += 1
-                    time.sleep(0.2)
+                    time.sleep(0.15)
                 move_ctr += 1
             else:
                 move_ctr = 0
@@ -123,9 +122,6 @@ class GUI:
                              pygame.Rect(self.width * 0.3, 0, self.width * 0.4, self.height / 15),
                              border_radius=50)  # prostokąt na górze
 
-            pygame.draw.rect(self.window, (255, 255, 255),
-                             pygame.Rect((self.width / 10, self.height / 5),
-                                         (self.width * 0.6, self.height * 0.2)),
             pygame.draw.rect(self.window, (188, 213, 255),
                              pygame.Rect(self.question_size[0] - 3, self.question_size[1] - 3,
                                          self.question_size[2] + 6, self.question_size[3] + 6),
@@ -244,6 +240,8 @@ class GUI:
         corr = 0
         chosen = 0
         color = (227, 227, 227)
+        move_ctr = 0
+        confirm_ctr = 0
         while self.run:
             QUESTION = pygame.font.Font.render(pygame.font.SysFont(self.font, 48), que, True, (
                 0, 0, 0))
@@ -258,7 +256,6 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -266,16 +263,15 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-                        self.__kill()
 
-            # sterowanie mięśniami
-            if self._rms.left > self._left_clbr:
-                if move_ctr > self._move_ticks:
-                    chosen += 1
-                    time.sleep(0.25)
-                move_ctr += 1
-            else:
-                move_ctr = 0
+                # sterowanie mięśniami
+                if self._rms.left > self._left_clbr:
+                    if move_ctr > self._move_ticks:
+                        chosen += 1
+                        time.sleep(0.15)
+                    move_ctr += 1
+                else:
+                    move_ctr = 0
 
             if chosen > 1:
                 chosen = 0
@@ -300,9 +296,9 @@ class GUI:
                             color = (255, 0, 0)
                             self.run = False
                             self.close = True
-                            self.__kill()
                             break
 
+            # sterowanie mięśniami
             if self._rms.right > self._right_clbr:
                 color = (130, 130, 130)
                 if confirm_ctr > self._confirm_ticks:
@@ -348,9 +344,6 @@ class GUI:
                              border_radius=15)
             pygame.draw.rect(self.window, (213, 229, 255),
                              pygame.Rect(self.question_size),
-            pygame.draw.rect(self.window, (255, 255, 255),
-                             pygame.Rect((self.width / 10, self.height / 5),
-                                         (self.width * 0.6, self.height * 0.2)),
                              border_radius=15)  # rysowanie pola na pytanie
 
             fish_placement = (3 * self.width / 4, self.height / 15)
@@ -376,6 +369,7 @@ class GUI:
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.question_size = (self.width / 10, self.height / 5, self.width * 0.6, self.height * 0.2)
 
+
         while self.run:
             text = pygame.font.Font.render(pygame.font.SysFont(self.font, 40), display, True, (0, 0, 0))
 
@@ -383,13 +377,12 @@ class GUI:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.run = False
-                    # self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-                        self.__kill()
+
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
@@ -445,7 +438,6 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -457,13 +449,12 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-                        self.__kill()
 
             # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
                 if move_ctr > self._move_ticks:
                     chosen += 1
-                    time.sleep(0.18)
+                    time.sleep(0.15)
                 move_ctr += 1
             else:
                 move_ctr = 0
@@ -494,8 +485,6 @@ class GUI:
                              border_radius=15)
             pygame.draw.rect(self.window, color,
                              pygame.Rect(button_location[chosen], self.button_size),
-                             border_radius=15)
-            pygame.draw.rect(self.window, color, pygame.Rect(button_location[chosen], self.button_size),
                              border_radius=15)
 
             # guzik pod pytanie
@@ -567,7 +556,6 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -575,7 +563,6 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-                        self.__kill()
 
             # sterowanie mięśniami
             if self._rms.right > self._right_clbr:
@@ -608,22 +595,19 @@ class GUI:
                                                                   self.message_size[1] + self.message_size[3] / 2 + 20)))
 
             pygame.display.update()
-        time.sleep(1)
 
     def calibration(self):
         self.run = True
         self.backgnd_quiz = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         self.message_size = (self.width / 10, self.height / 5, self.width * 0.6, self.height * 0.2)
         self.message_fontsize = 40
-        # palm_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
-        # tight_hand = pygame.image.load(os.path.join(self.path, self.backgnd_path))
         start_display_text = [u'Kalibracja zaraz się rozpocznie.',
                               u'Instrukcje pojawią się na ekranie']
 
         calib_display_text = [u'Rozluźnij ręce',
-                              u'Zaciśnij lewą rękę',
+                              u'Zaciśnij lekko lewą rękę',
                               u'Rozluźnij lewą rękę',
-                              u'Zaciśnij prawą rękę',
+                              u'Zaciśnij lekko prawą rękę',
                               u'Rozluźnij prawą rękę']
 
         end_display_text = [u'Dziękujemy.',
@@ -636,7 +620,6 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
-                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -644,7 +627,6 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
-                        self.__kill()
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
@@ -667,41 +649,39 @@ class GUI:
                 self.window.blit(display2, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2 + 30)))
 
-            elif time.time() - st_time < 13:
+            elif time.time() - st_time < 12:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    calib_display_text[0], True, (0, 0, 0))
-                # self.window.blit(palm_hand, (0, 0))
 
                 self.window.blit(display1, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2)))
 
-            elif time.time() - st_time < 18:
+            elif time.time() - st_time < 17:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    calib_display_text[1], True, (0, 0, 0))
-                # self.window.blit(tight_hand, (0, 0))
+
                 self._left_clbr = self._rms.calibration("left")
 
                 self.window.blit(display1, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2)))
 
-            elif time.time() - st_time < 23:
+            elif time.time() - st_time < 22:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    calib_display_text[2], True, (0, 0, 0))
-                # self.window.blit(palm_hand, (0, 0))
 
                 self.window.blit(display1, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2)))
 
-            elif time.time() - st_time < 28:
+            elif time.time() - st_time < 27:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    calib_display_text[3], True, (0, 0, 0))
-                # self.window.blit(tight_hand, (0, 0))
                 self._right_clbr = self._rms.calibration("right")
+                # self.window.blit(tight_hand, (0, 0))
 
                 self.window.blit(display1, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2)))
 
-            elif time.time() - st_time < 33:
+            elif time.time() - st_time < 32:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    calib_display_text[4], True, (0, 0, 0))
                 # self.window.blit(palm_hand, (0, 0))
@@ -709,7 +689,7 @@ class GUI:
                 self.window.blit(display1, display1.get_rect(
                     midleft=(self.message_size[0] * 10 / 8, self.message_size[1] + self.message_size[3] / 2)))
 
-            elif time.time() - st_time < 38:
+            elif time.time() - st_time < 37:
                 display1 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
                                                    end_display_text[0], True, (0, 0, 0))
                 display2 = pygame.font.Font.render(pygame.font.SysFont(self.font, self.message_fontsize),
@@ -791,53 +771,6 @@ class Logic:
         return self._correct
 
 
-class RMS:
-    _L_RMS_TIME = 0.25
-    _R_RMS_TIME = 1
-    _BUF_LEN = 128
-    _SAMPLING_RATE = 512
-
-    def __init__(self, lock):
-        self._left_hand = Array('d', np.zeros(self._BUF_LEN * 2))
-        self._right_hand = Array('d', np.zeros(self._BUF_LEN * 2))
-        self._lock = lock
-        signals = SignalProcess()
-        amplifier_process = Process(target=signals.start,
-                                    args=(self._lock,
-                                          self._left_hand,
-                                          self._right_hand))
-        amplifier_process.start()
-
-    @property
-    def left(self):
-        self._lock.acquire()
-        norm_sig = self._left_hand - np.mean(self._left_hand)
-        self._lock.release()
-        print("rms lewa: ", np.sqrt(np.sum(norm_sig ** 2)))
-        return np.sqrt(np.sum(norm_sig ** 2))
-
-    @property
-    def right(self):
-        self._lock.acquire()
-        norm_sig = self._right_hand - np.mean(self._right_hand)
-        self._lock.release()
-        print("rms prawa: ", np.sqrt(np.sum(norm_sig ** 2)))
-        return np.sqrt(np.sum(norm_sig ** 2))
-
-    def calibration(self, hand, calibration_time=5):
-        hands_signal = {"left": self.left,
-                        "right": self.right}
-
-        rms = 0
-        rms_ctr = 0
-        rms_samples = calibration_time * self._SAMPLING_RATE / self._BUF_LEN
-        while rms_ctr < rms_samples:
-            rms += hands_signal[hand]
-            rms_ctr += 1
-
-        return rms / rms_ctr
-
-
 class Quiz:
 
     def __init__(self, files, lock, queue):
@@ -898,13 +831,63 @@ class Quiz:
             if self._gui.correct and not self._gui.close:
                 self._gui.ending(u'Wygrana! Zostajesz milionerem!!!')
 
+class RMS:
+    _L_RMS_TIME = 0.25
+    _R_RMS_TIME = 1
+    _BUF_LEN = 128
+    _SAMPLING_RATE = 512
 
-# TUTAJ MAŁY PRZYKŁAD JAK TO WSZYSTKO MA DZIAŁAĆ, MNIEJ WIĘCEJ
+    def __init__(self, lock):
+        self._left_hand = Array('d', np.zeros(self._BUF_LEN * 2))
+        self._right_hand = Array('d', np.zeros(self._BUF_LEN * 2))
+        self._lock = lock
+        signals = SignalProcess()
+        amplifier_process = Process(target=signals.start,
+                                    args=(self._lock,
+                                          self._left_hand,
+                                          self._right_hand))
+        amplifier_process.start()
+        self._b, self._a = butter(3, 20/(self._SAMPLING_RATE/2), "highpass")
+        self._zl = lfilter_zi(self._b, self._a)
+        self._zr = lfilter_zi(self._b, self._a)
 
-# before this - KALIBRACJA
+    @property
+    def left(self):
+        self._lock.acquire()
+        sig = self._left_hand
+        sig, self._zl = lfilter(self._b, self._a, sig, zi=self._zl)
+        norm_sig = sig - np.mean(sig)
+        self._lock.release()
+        print("rms lewa: ", np.sqrt(np.sum(norm_sig ** 2)))
+        return np.sqrt(np.sum(norm_sig ** 2))
+
+    @property
+    def right(self):
+        self._lock.acquire()
+        sig = self._right_hand
+        sig, self._zr = lfilter(self._b, self._a, sig, zi=self._zr)
+        norm_sig = sig - np.mean(sig)
+        self._lock.release()
+        print("rms prawa: ", np.sqrt(np.sum(norm_sig ** 2)))
+        return np.sqrt(np.sum(norm_sig ** 2))
+
+    def calibration(self, hand, calibration_time=5):
+        hands_signal = {"left": self.left,
+                        "right": self.right}
+
+        rms = 0
+        rms_ctr = 0
+        rms_samples = calibration_time * self._SAMPLING_RATE / self._BUF_LEN
+        while rms_ctr < rms_samples:
+            rms += hands_signal[hand]
+            rms_ctr += 1
+
+        return rms / rms_ctr * 0.75
+
+
 if __name__ == "__main__":
     process_lock = Lock()
-    processes_queue = mp.Queue()  # <---
+    processes_queue = mp.Queue()
     q = Quiz(['questions_stage_1.json',
               'questions_stage_2.json',
               'questions_stage_3.json',
@@ -916,7 +899,6 @@ if __name__ == "__main__":
                            args=())
     game_process.start()
 
-    # TODO
     try:
         while processes_queue.empty():
             pass

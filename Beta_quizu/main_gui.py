@@ -89,6 +89,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -259,6 +260,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -266,6 +268,7 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
                 # sterowanie mięśniami
                 if self._rms.left > self._left_clbr:
@@ -298,6 +301,7 @@ class GUI:
                             color = (255, 0, 0)
                             self.run = False
                             self.close = True
+                            self.__kill()
                             break
 
             # sterowanie mięśniami
@@ -383,6 +387,7 @@ class GUI:
                     if event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 
@@ -438,6 +443,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
@@ -449,6 +455,7 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             # sterowanie mięśniami
             if self._rms.left > self._left_clbr:
@@ -556,6 +563,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -563,6 +571,7 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             # sterowanie mięśniami
             if self._rms.right > self._right_clbr:
@@ -622,6 +631,7 @@ class GUI:
                 if event.type == pygame.QUIT:
                     self.run = False
                     self.close = True
+                    self.__kill()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -629,6 +639,7 @@ class GUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.run = False
                         self.close = True
+                        self.__kill()
 
             self.window.blit(self.backgnd_quiz, (0, 0))  # rysowanie tła
 

@@ -37,7 +37,7 @@ class GUI:
         # sygnały
         self.__queue = queue
         self._rms = RMS(lock)
-        self._move_ticks = 8
+        self._move_ticks = 7
         self._confirm_ticks = 20
         # calibration properties
         self._left_clbr = 3000
@@ -100,7 +100,7 @@ class GUI:
             if self._rms.left > self._left_clbr:
                 if move_ctr > self._move_ticks:
                     chosen += 1
-                    time.sleep(0.15)
+                    time.sleep(0.1)
                 move_ctr += 1
             else:
                 move_ctr = 0
@@ -601,16 +601,16 @@ class GUI:
         self.message_size = (self.width / 10, self.height / 5, self.width * 0.6, self.height * 0.2)
         self.message_fontsize = 40
         start_display_text = [u'Kalibracja zaraz się rozpocznie.',
-                              u'Instrukcje pojawią się na ekranie']
+                              u'Instrukcje pojawią się na ekranie.']
 
-        calib_display_text = [u'Rozluźnij ręce',
-                              u'Zaciśnij lekko lewą rękę',
-                              u'Rozluźnij lewą rękę',
-                              u'Zaciśnij lekko prawą rękę',
-                              u'Rozluźnij prawą rękę']
+        calib_display_text = [u'Rozluźnij ręce.',
+                              u'Zaciśnij lekko lewą rękę.',
+                              u'Rozluźnij lewą rękę.',
+                              u'Zaciśnij lekko prawą rękę.',
+                              u'Rozluźnij prawą rękę.']
 
         end_display_text = [u'Dziękujemy.',
-                            u'Za chwilę rozpocznie się gra']
+                            u'Za chwilę rozpocznie się gra.']
 
         st_time = time.time()
         while self.run:
@@ -882,7 +882,7 @@ class RMS:
             rms += hands_signal[hand]
             rms_ctr += 1
 
-        return rms / rms_ctr * 0.75
+        return rms / rms_ctr * 0.66
 
 
 if __name__ == "__main__":

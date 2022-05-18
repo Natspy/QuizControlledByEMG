@@ -26,7 +26,8 @@ class GUI:
         self.height = self.window.get_height()
         self.backgnd_path = "tlo_nowe.png"
         self.fish_path = "rybcia.png"
-        self.fish = pygame.image.load(os.path.join(self.path, self.fish_path))
+        self.fish_load = pygame.image.load(os.path.join(self.path, self.fish_path))
+        self.fish = pygame.transform.scale(self.fish_load, (int(self.width * 0.25), int(self.height * 0.9)))
 
     def question(self, que, ans, corr, award):
         """_summary_
@@ -175,7 +176,8 @@ class GUI:
             self.window.blit(ANS4, ANS4.get_rect(midleft=(ans_location[3][0],
                                                           ans_location[3][1])))
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            #rysowanie rybki
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(QUESTION, QUESTION.get_rect(center=(self.question_size[0] + self.question_size[2] / 2,
@@ -273,7 +275,7 @@ class GUI:
                              pygame.Rect(self.question_size),
                              border_radius=15)  # rysowanie pola na pytanie
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))
@@ -323,7 +325,7 @@ class GUI:
             self.window.blit(text, text.get_rect(center=(self.question_size[0] + self.question_size[2] / 2,
                                                          self.question_size[1] + self.question_size[3] / 2)))
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             pygame.display.update()
@@ -425,7 +427,7 @@ class GUI:
                             (self.width / 9 + 0.015 * button_pos_x,
                              button_pos_y + button_height / 2 + 2.4 * button_height)]
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(ANS1, ANS1.get_rect(midleft=(ans_location[0][0], ans_location[0][1])))
@@ -478,7 +480,7 @@ class GUI:
                              pygame.Rect(self.message_size),
                              border_radius=15)  # rysowanie pola na pytanie
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             self.window.blit(display1, display1.get_rect(midleft=(self.message_size[0] * 10 / 8,
@@ -597,7 +599,7 @@ class GUI:
             else:
                 self.run = False
 
-            fish_placement = (3 * self.width / 4, self.height / 15)
+            fish_placement = (2.9 * self.width / 4, self.height / 15)
             self.window.blit(self.fish, fish_placement)
 
             pygame.display.update()

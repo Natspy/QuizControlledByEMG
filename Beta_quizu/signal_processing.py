@@ -50,7 +50,7 @@ class SignalProcess:
     """
     _SAMPLING_RATE = 512
 
-    _CH_LIST = [0, 1, 2, 3]
+    _CH_LIST = [8, 9, 18, 19]
 
     def __init__(self, buf_len=128):
         self._amp_connection = AmplifierConnection(self._SAMPLING_RATE)

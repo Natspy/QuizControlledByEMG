@@ -272,15 +272,16 @@ class GUI:
                         self.close = True
                         self.__kill()
 
-                # sterowanie mięśniami
-                if self._rms.left > self._left_clbr:
-                    if move_ctr > self._move_ticks:
-                        chosen += 1
-                        time.sleep(0.15)
-                    move_ctr += 1
-                else:
-                    move_ctr = 0
-
+            # sterowanie mięśniami
+            if self._rms.left > self._left_clbr:
+                if move_ctr > self._move_ticks and left_block == 0:
+                    chosen += 1
+                    left_block = 1
+                move_ctr += 1
+            else:
+                move_ctr = 0
+                left_block = 0
+            
             if chosen > 1:
                 chosen = 0
 
@@ -317,6 +318,8 @@ class GUI:
                         color = (255, 0, 0)
                         self.run = False
                         self.correct = False
+                        self.__kill()
+
                         break
                 confirm_ctr += 1
 
